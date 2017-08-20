@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus
 import spock.lang.Shared
 import spock.lang.Specification
 
+import java.time.LocalDate
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AnniversariesIntegrationSpec extends Specification{
 
@@ -20,8 +22,8 @@ class AnniversariesIntegrationSpec extends Specification{
     AnniversaryRepository repository
 
     void setup() {
-        repository.save(new AnniversaryDTO(null, 'Foo', '2017-01-01'))
-        repository.save(new AnniversaryDTO(null, 'Bar', '2015-01-01'))
+        repository.save(new AnniversaryDTO(null, 'Foo', LocalDate.parse('2017-01-01')))
+        repository.save(new AnniversaryDTO(null, 'Bar', LocalDate.parse('2015-01-01')))
     }
 
     void cleanup() {
@@ -38,9 +40,11 @@ class AnniversariesIntegrationSpec extends Specification{
         response.body[0].id != null
         response.body[0].name == 'Foo'
         response.body[0].hireDate == '2017-01-01'
+        response.body[0].anniversaryDate == '2018-01-01'
 
         response.body[1].id != null
         response.body[1].name == 'Bar'
         response.body[1].hireDate == '2015-01-01'
+        response.body[1].anniversaryDate == '2018-01-01'
     }
 }

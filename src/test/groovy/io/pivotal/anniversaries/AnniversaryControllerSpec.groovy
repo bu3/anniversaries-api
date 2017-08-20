@@ -2,12 +2,14 @@ package io.pivotal.anniversaries
 
 import spock.lang.Specification
 
+import java.time.LocalDate
+
 
 class AnniversaryControllerSpec extends Specification {
 
     def "Should load anniversaries"() {
         given:
-        def expectedAnniversaries = new Anniversary(1, 'name', 'aHiringDate')
+        def expectedAnniversaries = new Anniversary(1, 'name', LocalDate.MAX)
         AnniversaryService anniversaryService = Mock(AnniversaryService)
         AnniversaryController anniversaryController = new AnniversaryController(anniversaryService)
 
