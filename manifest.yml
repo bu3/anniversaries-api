@@ -1,0 +1,5 @@
+---
+applications:
+- name: anniversaries-api
+  path: ./build/libs/anniversaries-api-0.0.1-SNAPSHOT.jar
+  memory: 1024M
