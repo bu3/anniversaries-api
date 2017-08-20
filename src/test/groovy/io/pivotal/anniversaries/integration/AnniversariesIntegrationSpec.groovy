@@ -1,6 +1,7 @@
 package io.pivotal.anniversaries.integration
 
 import io.pivotal.anniversaries.Anniversary
+import io.pivotal.anniversaries.AnniversaryDTO
 import io.pivotal.anniversaries.AnniversaryRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -19,8 +20,8 @@ class AnniversariesIntegrationSpec extends Specification{
     AnniversaryRepository repository
 
     void setup() {
-        repository.save(new Anniversary(null, 'Foo', '2017-01-01'))
-        repository.save(new Anniversary(null, 'Bar', '2015-01-01'))
+        repository.save(new AnniversaryDTO(null, 'Foo', '2017-01-01'))
+        repository.save(new AnniversaryDTO(null, 'Bar', '2015-01-01'))
     }
 
     void cleanup() {

@@ -7,7 +7,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
 
     def "Should load data from database"() {
         given:
-        def expectedAnniversaries = [new Anniversary(1, 'foo', 'hiringDate')]
+        def anniversaryDTO = new AnniversaryDTO(1, 'foo', 'hiringDate')
         AnniversaryRepository repository = Mock(AnniversaryRepository)
         AnniversaryService anniversaryService = new DefaultAnniversaryService(repository)
 
@@ -15,7 +15,9 @@ class DefaultAnniversaryServiceSpec extends Specification {
         def anniversaries = anniversaryService.loadAnniversaries()
 
         then:
-        1 * repository.findAll() >> expectedAnniversaries
-        anniversaries == expectedAnniversaries
+        1 * repository.findAll() >> [anniversaryDTO]
+        anniversaries[0].id == anniversaryDTO.id
+        anniversaries[0].name == anniversaryDTO.name
+        anniversaries[0].hireDate == anniversaryDTO.hireDate
     }
 }
