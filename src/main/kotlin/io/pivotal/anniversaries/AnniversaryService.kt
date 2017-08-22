@@ -1,7 +1,6 @@
 package io.pivotal.anniversaries
 
 import org.springframework.stereotype.Service
-import java.time.LocalDate
 
 
 interface AnniversaryService {
@@ -21,14 +20,6 @@ class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository
         }
     }
 
-    private fun calculateAnniversaryDate(hiringDate: LocalDate): LocalDate {
-        val today = LocalDate.now()
-        val anniversaryDate = LocalDate.of(today.year, hiringDate.month, hiringDate.dayOfYear)
-        if (anniversaryDate.isBefore(today) ) {
-            return anniversaryDate.plusYears(1)
-        }
-        else
-            return anniversaryDate
-    }
+
 }
 
