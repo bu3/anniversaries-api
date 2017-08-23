@@ -1,10 +1,8 @@
 package io.pivotal.anniversaries
 
-import org.apache.tomcat.jni.Local
 import spock.lang.Specification
 
 import java.time.LocalDate
-
 
 class DefaultAnniversaryServiceSpec extends Specification {
 
