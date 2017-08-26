@@ -8,8 +8,8 @@ class DefaultAnniversaryServiceSpec extends Specification {
 
     def "Should load data from database"() {
         given:
-        def anniversaryDTO = new AnniversaryDTO(1, 'foo', LocalDate.of(2016,1,1))
-        AnniversaryRepository repository = Mock(AnniversaryRepository)
+        def anniversaryDTO = new Employee(1, 'foo', LocalDate.of(2016,1,1))
+        EmployeeRepository repository = Mock(EmployeeRepository)
         AnniversaryService anniversaryService = new DefaultAnniversaryService(repository)
 
         when:

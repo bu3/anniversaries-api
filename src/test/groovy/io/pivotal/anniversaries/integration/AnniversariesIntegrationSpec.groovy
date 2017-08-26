@@ -1,13 +1,11 @@
 package io.pivotal.anniversaries.integration
 
-import io.pivotal.anniversaries.Anniversary
-import io.pivotal.anniversaries.AnniversaryDTO
-import io.pivotal.anniversaries.AnniversaryRepository
+import io.pivotal.anniversaries.Employee
+import io.pivotal.anniversaries.EmployeeRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
-import spock.lang.Shared
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -19,11 +17,11 @@ class AnniversariesIntegrationSpec extends Specification{
     TestRestTemplate restTemplate
 
     @Autowired
-    AnniversaryRepository repository
+    EmployeeRepository repository
 
     void setup() {
-        repository.save(new AnniversaryDTO(null, 'Foo', LocalDate.parse('2017-01-01')))
-        repository.save(new AnniversaryDTO(null, 'Bar', LocalDate.parse('2015-01-01')))
+        repository.save(new Employee(null, 'Foo', LocalDate.parse('2017-01-01')))
+        repository.save(new Employee(null, 'Bar', LocalDate.parse('2015-01-01')))
     }
 
     void cleanup() {

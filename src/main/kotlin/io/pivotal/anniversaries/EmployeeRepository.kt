@@ -10,7 +10,7 @@ import javax.persistence.Id
 
 
 @Entity
-class AnniversaryDTO (
+class Employee(
         @Id
         @GeneratedValue(strategy= GenerationType.AUTO)
         val id: Long? = null,
@@ -25,7 +25,7 @@ class AnniversaryDTO (
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as AnniversaryDTO
+        other as Employee
 
         if (id != other.id) return false
         if (name != other.name) return false
@@ -42,4 +42,4 @@ class AnniversaryDTO (
     }
 }
 
-interface AnniversaryRepository: JpaRepository<AnniversaryDTO, Long>
+interface EmployeeRepository : JpaRepository<Employee, Long>

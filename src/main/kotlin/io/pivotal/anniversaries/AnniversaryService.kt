@@ -8,10 +8,10 @@ interface AnniversaryService {
 }
 
 @Service
-class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository): AnniversaryService  {
+class DefaultAnniversaryService(val employeeRepository: EmployeeRepository): AnniversaryService  {
 
     override fun loadAnniversaries(): List<Anniversary> {
-        val anniversaries = anniversaryRepository.findAll()
+        val anniversaries = employeeRepository.findAll()
         return anniversaries.map {
             val anniversary = Anniversary(it.id, it.name, it.hireDate)
             anniversary.anniversaryDate = calculateAnniversaryDate(it.hireDate)
