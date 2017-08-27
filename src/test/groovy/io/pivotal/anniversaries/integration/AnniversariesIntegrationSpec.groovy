@@ -14,7 +14,7 @@ class AnniversariesIntegrationSpec extends Specification {
 
     def "Should return anniversaries"() {
         when:
-        def response = restTemplate.postForEntity('/employees', [name: 'Foo', hireDate: '2017-01-01'], String, [])
+        def response = restTemplate.postForEntity('/employees', [name: 'Foo', hireDate: '2016-11-01'], String, [])
 
         then:
         response.statusCode == HttpStatus.CREATED
@@ -33,8 +33,8 @@ class AnniversariesIntegrationSpec extends Specification {
         response.body.size() == 2
         response.body[0].id != null
         response.body[0].name == 'Foo'
-        response.body[0].hireDate == '2017-01-01'
-        response.body[0].anniversaryDate == '2018-01-01'
+        response.body[0].hireDate == '2016-11-01'
+        response.body[0].anniversaryDate == '2017-11-01'
 
         response.body[1].id != null
         response.body[1].name == 'Bar'

@@ -24,7 +24,7 @@ private fun manageLeapYears(hiringDate: LocalDate, today: LocalDate): LocalDate 
 
         LocalDate.of(year, month, dayOfYear)
     } else {
-        LocalDate.of(today.year, hiringDate.month, hiringDate.dayOfYear)
+        LocalDate.of(today.year, hiringDate.month, hiringDate.dayOfMonth)
     }
 }
 
