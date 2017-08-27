@@ -1,36 +1,32 @@
 package io.pivotal.anniversaries.integration
 
-import io.pivotal.employees.Employee
-import io.pivotal.employees.EmployeeRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
 import spock.lang.Specification
 
-import java.time.LocalDate
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class AnniversariesIntegrationSpec extends Specification{
+class AnniversariesIntegrationSpec extends Specification {
 
     @Autowired
     TestRestTemplate restTemplate
 
-    @Autowired
-    EmployeeRepository repository
-
-    void setup() {
-        repository.save(new Employee(null, 'Foo', LocalDate.parse('2017-01-01')))
-        repository.save(new Employee(null, 'Bar', LocalDate.parse('2015-01-01')))
-    }
-
-    void cleanup() {
-        repository.deleteAll()
-    }
-
     def "Should return anniversaries"() {
         when:
-        def response = restTemplate.getForEntity('/anniversaries', List)
+        def response = restTemplate.postForEntity('/employees', [name: 'Foo', hireDate: '2017-01-01'], String, [])
+
+        then:
+        response.statusCode == HttpStatus.CREATED
+
+        when:
+        response = restTemplate.postForEntity('/employees', [name: 'Bar', hireDate: '2015-01-01'], String, [])
+
+        then:
+        response.statusCode == HttpStatus.CREATED
+
+        when:
+        response = restTemplate.getForEntity('/anniversaries', List)
 
         then:
         response.statusCode == HttpStatus.OK
