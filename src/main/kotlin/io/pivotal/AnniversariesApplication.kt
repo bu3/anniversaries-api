@@ -1,4 +1,4 @@
-package io.pivotal.anniversaries
+package io.pivotal
 
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication

@@ -1,7 +1,7 @@
 package io.pivotal.anniversaries.integration
 
-import io.pivotal.anniversaries.Employee
-import io.pivotal.anniversaries.EmployeeRepository
+import io.pivotal.employees.Employee
+import io.pivotal.employees.EmployeeRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate

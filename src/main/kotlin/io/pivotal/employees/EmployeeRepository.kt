@@ -1,4 +1,4 @@
-package io.pivotal.anniversaries
+package io.pivotal.employees
 
 import org.jetbrains.annotations.NotNull
 import org.springframework.data.jpa.repository.JpaRepository

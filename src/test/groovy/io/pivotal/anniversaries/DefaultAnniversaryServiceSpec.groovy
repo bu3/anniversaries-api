@@ -1,5 +1,7 @@
 package io.pivotal.anniversaries
 
+import io.pivotal.employees.Employee
+import io.pivotal.employees.EmployeeRepository
 import spock.lang.Specification
 
 import java.time.LocalDate
