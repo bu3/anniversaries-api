@@ -1,9 +1,8 @@
 package io.pivotal.anniversaries
 
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ResponseBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
+@CrossOrigin(origins = arrayOf("*"), methods = arrayOf(RequestMethod.GET), allowedHeaders = arrayOf("*"))
 @RestController
 class AnniversaryController (val anniversaryService:AnniversaryService) {
 
