@@ -8,4 +8,4 @@ inputs:
 - name: anniversaries-api
 
 run:
-  path: ./anniversaries-api/ci/test.sh
+  path: ./ci/test.sh
