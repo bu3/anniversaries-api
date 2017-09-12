@@ -5,7 +5,7 @@ image_resource:
   source:
     repository: openjdk
     tag: jdk
-    
+
 inputs:
 - name: anniversaries-api
 
