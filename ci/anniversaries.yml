@@ -1,0 +1,14 @@
+resources:
+- name: anniversaries-api
+  type: git
+  source:
+    uri: https://github.com/bu3/anniversaries-api
+    branch: master
+
+
+jobs:
+- name: test
+  plan:
+  - get: anniversaries-api
+  - task: tests
+    file: anniversaries-api/ci/build.yml
