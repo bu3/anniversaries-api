@@ -1,0 +1,11 @@
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: busybox}
+
+inputs:
+- name: anniversaries-api
+
+run:
+  path: ./anniversaries-api/ci/test.sh
