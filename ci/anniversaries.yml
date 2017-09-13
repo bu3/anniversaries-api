@@ -4,7 +4,14 @@ resources:
   source:
     uri: https://github.com/bu3/anniversaries-api
     branch: master
-
+- name: cloud-foundry
+  type: cf
+  source:
+    api: https://api.run.pivotal.io
+    username: ((cf-username))
+    password: ((cf-password))
+    organization: Catulla
+    space: development
 
 jobs:
 - name: test
@@ -13,3 +20,6 @@ jobs:
     trigger: true
   - task: tests
     file: anniversaries-api/ci/build.yml
+  - put: cloud-foundry
+    params:
+      manifest: anniversaries-api/manifest.yml
