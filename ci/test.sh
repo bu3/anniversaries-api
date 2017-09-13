@@ -6,4 +6,9 @@ pwd
 ls -al
 
 cd anniversaries-api
-./gradlew build test
+./gradlew test build
+
+echo '>>>>>>>>>>>>> Copying jar file'
+cp  -R ./build ../artifact/
+echo '>>>>>>>>>>>>> Copying CF Manifest'
+cp manifest.yml ../artifact

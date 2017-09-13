@@ -23,4 +23,4 @@ jobs:
     file: anniversaries-api/ci/build.yml
   - put: cloud-foundry
     params:
-      manifest: anniversaries-api/manifest.yml
+      manifest: ./artifact/manifest.yml
