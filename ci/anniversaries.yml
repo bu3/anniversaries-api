@@ -10,5 +10,6 @@ jobs:
 - name: test
   plan:
   - get: anniversaries-api
+    trigger: true
   - task: tests
     file: anniversaries-api/ci/build.yml
