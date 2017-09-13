@@ -9,10 +9,6 @@ image_resource:
 inputs:
 - name: anniversaries-api
 
-outputs:
-- name: anniversaries-api
-
-
 run:
   path: ./anniversaries-api/ci/test.sh
 
