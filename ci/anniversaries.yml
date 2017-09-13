@@ -4,6 +4,7 @@ resources:
   source:
     uri: https://github.com/bu3/anniversaries-api
     branch: master
+
 - name: cloud-foundry
   type: cf
   source:
