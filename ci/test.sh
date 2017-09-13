@@ -6,4 +6,4 @@ pwd
 ls -al
 
 cd anniversaries-api
-./gradlew test
+./gradlew build test
