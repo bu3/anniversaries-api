@@ -20,7 +20,7 @@ jobs:
   - get: anniversaries-api
     trigger: true
   - task: tests
-    file: anniversaries-api/ci/build.yml
+    file: anniversaries-api/ci/tasks/test.yml
   - put: cloud-foundry
     params:
       manifest: ./artifact/manifest.yml
