@@ -15,14 +15,14 @@ resources:
     space: ((cf-space))
 
 jobs:
-- name: unit test
+- name: unit-test
   plan:
   - get: anniversaries-api
     trigger: true
   - task: unit tests
     file: anniversaries-api/ci/tasks/unit-test.yml
 
-- name: integration tests
+- name: integration-tests
   plan:
   - get: anniversaries-api
     trigger: true
@@ -32,7 +32,7 @@ jobs:
 - name: deploy
   plan:
   - get: anniversaries-api
-    passed: [unit test, integration tests]
+    passed: [unit-test, integration-tests]
     trigger: true
   - task: unit tests
     file: anniversaries-api/ci/tasks/build.yml
