@@ -31,6 +31,9 @@ jobs:
 
 - name: deploy
   plan:
+  - get: anniversaries-api
+    passed: [unit test, integration tests]
+    trigger: true
   - put: cloud-foundry
     params:
       manifest: ./artifact/manifest.yml
