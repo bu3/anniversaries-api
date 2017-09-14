@@ -1,1 +1,1 @@
-bosh create-env concourse-lite.yml --state concourse-lite-state.json
+bosh create-env concourse-lite.yml 
