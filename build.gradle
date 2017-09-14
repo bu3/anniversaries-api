@@ -32,6 +32,15 @@ repositories {
 	mavenCentral()
 }
 
+test {
+	exclude 'io/pivotal/anniversaries/integration/**'
+}
+
+task testIntegration(type: Test) {
+
+	include 'io/pivotal/anniversaries/integration/**'
+}
+
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
