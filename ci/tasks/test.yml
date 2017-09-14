@@ -13,5 +13,5 @@ outputs:
 - name: artifact
 
 run:
-  path: ./anniversaries-api/ci/tasks/test.sh
+  path: ./anniversaries-api/ci/scripts/test.sh
 
