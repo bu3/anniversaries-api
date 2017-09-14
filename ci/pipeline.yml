@@ -15,12 +15,22 @@ resources:
     space: ((cf-space))
 
 jobs:
-- name: test
+- name: unit test
   plan:
   - get: anniversaries-api
     trigger: true
-  - task: tests
-    file: anniversaries-api/ci/tasks/test.yml
+  - task: unit tests
+    file: anniversaries-api/ci/tasks/unit-test.yml
+
+- name: integration tests
+  plan:
+  - get: anniversaries-api
+    trigger: true
+  - task: unit tests
+    file: anniversaries-api/ci/tasks/integration-test.yml
+
+- name: deploy
+  plan:
   - put: cloud-foundry
     params:
       manifest: ./artifact/manifest.yml
