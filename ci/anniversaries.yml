@@ -11,8 +11,8 @@ resources:
     api: https://api.run.pivotal.io
     username: ((cf-username))
     password: ((cf-password))
-    organization: Catulla
-    space: development
+    organization: ((cf-organisation))
+    space: ((cf-space))
 
 jobs:
 - name: test
