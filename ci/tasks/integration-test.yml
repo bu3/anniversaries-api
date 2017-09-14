@@ -10,5 +10,5 @@ inputs:
 - name: anniversaries-api
 
 run:
-  path: ./anniversaries-api/ci/scripts/integration-test.sh
+  path: ./anniversaries-api/ci/scripts/integration-tests.sh
 
