@@ -13,7 +13,7 @@ class JarvisAIHealth() : HealthIndicator {
 
     override fun health(): Health {
         try {
-            val response = restTemplate.getForEntity("https://us-central1-concourse-setup.cloudfunctions.net/health", String.javaClass)
+            val response = restTemplate.getForEntity("https://us-central1-concourse-setup.cloudfunctions.net/health", String::class.java)
             if (response.statusCode != HttpStatus.OK) {
                 return Health.down().build()
             }

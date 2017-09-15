@@ -39,3 +39,4 @@ jobs:
   - put: cloud-foundry
     params:
       manifest: ./artifact/manifest.yml
+      current_app_name: anniversaries-api
