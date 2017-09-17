@@ -1,5 +1,6 @@
 package io.pivotal.employees
 
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.stereotype.Service
 
 interface EmployeeService {
@@ -8,9 +9,11 @@ interface EmployeeService {
 }
 
 @Service
-class DefaultEmployeeService(val employeeRepository: EmployeeRepository) : EmployeeService {
+class DefaultEmployeeService(val employeeRepository: EmployeeRepository, val publisher: ApplicationEventPublisher) : EmployeeService {
     override fun store(employee: Employee): Employee {
-        return employeeRepository.save(employee)
+        val save = employeeRepository.save(employee)
+        publisher.publishEvent(EmployeeCreatedEvent(save))
+        return save
     }
 
     override fun loadEmployees(): List<Employee> {

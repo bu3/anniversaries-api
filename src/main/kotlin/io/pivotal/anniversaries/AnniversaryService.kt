@@ -1,26 +1,27 @@
 package io.pivotal.anniversaries
 
-import io.pivotal.employees.EmployeeService
+import io.pivotal.employees.EmployeeCreatedEvent
+import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 
 
 interface AnniversaryService {
     fun loadAnniversaries(): List<Anniversary>
+    fun handleEmployeeCreatedEvent(employeeCreatedEvent: EmployeeCreatedEvent)
 }
 
 @Service
-class DefaultAnniversaryService(val employeeService: EmployeeService): AnniversaryService  {
+class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository): AnniversaryService  {
 
     override fun loadAnniversaries(): List<Anniversary> {
-        val anniversaries = employeeService.loadEmployees()
-        return anniversaries.map {
-            val anniversary = Anniversary(it.id, it.name, it.hireDate)
-            anniversary.anniversaryDate = calculateAnniversaryDate(it.hireDate)
-
-            anniversary
-        }
+        return anniversaryRepository.findAll()
     }
 
-
+    @EventListener
+    override fun handleEmployeeCreatedEvent(employeeCreatedEvent: EmployeeCreatedEvent) {
+        val employee = employeeCreatedEvent.employee
+        val anniversary = Anniversary(employee.id, employee.name, employee.hireDate, calculateAnniversaryDate(employee.hireDate))
+        anniversaryRepository.save(anniversary)
+    }
 }
 
