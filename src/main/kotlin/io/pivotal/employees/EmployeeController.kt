@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*
 @RestController
 class EmployeeController(private val employeeService: EmployeeService) {
 
-
     @PostMapping("/employees")
     @ResponseBody
     @ResponseStatus(HttpStatus.CREATED)
