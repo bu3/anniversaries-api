@@ -24,7 +24,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
         def anniversaries = anniversaryService.loadAnniversaries()
 
         then:
-        1 * anniversaryRepository.findAll() >> expectedAnniversaries
+        1 * anniversaryRepository.findAllByOrderByAnniversaryDateAsc() >> expectedAnniversaries
         anniversaries == expectedAnniversaries
     }
 

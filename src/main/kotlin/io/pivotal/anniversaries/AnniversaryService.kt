@@ -14,7 +14,7 @@ interface AnniversaryService {
 class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository): AnniversaryService  {
 
     override fun loadAnniversaries(): List<Anniversary> {
-        return anniversaryRepository.findAll()
+        return anniversaryRepository.findAllByOrderByAnniversaryDateAsc()
     }
 
     @EventListener
@@ -24,4 +24,3 @@ class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository
         anniversaryRepository.save(anniversary)
     }
 }
-

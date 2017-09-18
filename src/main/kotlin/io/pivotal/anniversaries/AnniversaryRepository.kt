@@ -23,4 +23,6 @@ data class Anniversary(
     constructor() : this(name = "", hireDate = LocalDate.MIN, anniversaryDate = LocalDate.MAX)
 }
 
-interface AnniversaryRepository : JpaRepository<Anniversary, Long>
+interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
+    fun findAllByOrderByAnniversaryDateAsc() : List<Anniversary>
+}
