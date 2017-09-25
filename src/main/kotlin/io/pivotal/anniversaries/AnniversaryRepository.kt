@@ -11,8 +11,9 @@ import javax.persistence.Id
 @Entity
 data class Anniversary(
         @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long? = null,
+        @GeneratedValue
+        var id: Long = 0,
+
         @NotNull
         val name: String,
         @NotNull

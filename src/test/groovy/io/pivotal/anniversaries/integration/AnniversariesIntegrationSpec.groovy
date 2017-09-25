@@ -6,6 +6,8 @@ import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
 import spock.lang.Specification
 
+import java.time.LocalDate
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AnniversariesIntegrationSpec extends Specification {
 
@@ -13,14 +15,16 @@ class AnniversariesIntegrationSpec extends Specification {
     TestRestTemplate restTemplate
 
     def "Should return anniversaries"() {
+
+        given:
+        def anniversariesDates = []
+        def expectedDates = []
+        1.step 2, 1, {
+            expectedDates.add(LocalDate.parse('2016-11-01').plusYears(it).toString())
+        }
+
         when:
         def response = restTemplate.postForEntity('/employees', [name: 'Foo', hireDate: '2016-11-01'], String, [])
-
-        then:
-        response.statusCode == HttpStatus.CREATED
-
-        when:
-        response = restTemplate.postForEntity('/employees', [name: 'Bar', hireDate: '2015-01-01'], String, [])
 
         then:
         response.statusCode == HttpStatus.CREATED
@@ -30,15 +34,13 @@ class AnniversariesIntegrationSpec extends Specification {
 
         then:
         response.statusCode == HttpStatus.OK
-        response.body.size() == 2
-        response.body[0].id != null
-        response.body[0].name == 'Foo'
-        response.body[0].hireDate == '2016-11-01'
-        response.body[0].anniversaryDate == '2017-11-01'
-
-        response.body[1].id != null
-        response.body[1].name == 'Bar'
-        response.body[1].hireDate == '2015-01-01'
-        response.body[1].anniversaryDate == '2018-01-01'
+        response.body.size() == 30
+        response.body.each { anniversary ->
+            assert anniversary.id != null
+            assert anniversary.name == 'Foo'
+            assert anniversary.hireDate == '2016-11-01'
+            anniversariesDates.add(anniversary.anniversaryDate)
+        }
+        expectedDates.containsAll(anniversariesDates)
     }
 }
