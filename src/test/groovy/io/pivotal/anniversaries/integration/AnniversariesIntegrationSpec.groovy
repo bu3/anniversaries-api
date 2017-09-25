@@ -19,7 +19,7 @@ class AnniversariesIntegrationSpec extends Specification {
         given:
         def anniversariesDates = []
         def expectedDates = []
-        1.step 2, 1, {
+        1.step 31, 1, {
             expectedDates.add(LocalDate.parse('2016-11-01').plusYears(it).toString())
         }
 
@@ -41,6 +41,7 @@ class AnniversariesIntegrationSpec extends Specification {
             assert anniversary.hireDate == '2016-11-01'
             anniversariesDates.add(anniversary.anniversaryDate)
         }
+        expectedDates.size() == anniversariesDates.size()
         expectedDates.containsAll(anniversariesDates)
     }
 }

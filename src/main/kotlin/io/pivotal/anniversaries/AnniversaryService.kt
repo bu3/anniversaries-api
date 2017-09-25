@@ -4,7 +4,7 @@ import io.pivotal.employees.EmployeeCreatedEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 
-val INITIAL_ANNIVERSARIES = 30
+val INITIAL_ANNIVERSARIES = 29
 
 interface AnniversaryService {
     fun loadAnniversaries(): List<Anniversary>
@@ -22,13 +22,10 @@ class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository
     override fun handleEmployeeCreatedEvent(employeeCreatedEvent: EmployeeCreatedEvent) {
         val employee = employeeCreatedEvent.employee
         val firstAnniversary = calculateAnniversaryDate(employee.hireDate)
-        val saved = arrayListOf<Anniversary>()
-        var anniversary: Anniversary
-        (1..INITIAL_ANNIVERSARIES step 1).forEach { index ->
-            anniversary = Anniversary(name=employee.name, hireDate = employee.hireDate, anniversaryDate = firstAnniversary.plusYears(index.toLong()))
-            println(anniversary)
-            saved.add(anniversaryRepository.saveAndFlush(anniversary))
+        val anniversaries = arrayListOf<Anniversary>()
+        (0..INITIAL_ANNIVERSARIES step 1).forEach { index ->
+            anniversaries.add(Anniversary(name=employee.name, hireDate = employee.hireDate, anniversaryDate = firstAnniversary.plusYears(index.toLong())))
         }
-        saved.forEach { println(it.id) }
+        anniversaryRepository.save(anniversaries)
     }
 }
