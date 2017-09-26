@@ -15,9 +15,7 @@ class AnniversariesIntegrationSpec extends Specification {
     TestRestTemplate restTemplate
 
     def "Should return anniversaries"() {
-
         given:
-        def anniversariesDates = []
         def expectedDates = []
         1.step 31, 1, {
             expectedDates.add(LocalDate.parse('2016-11-01').plusYears(it).toString())
@@ -39,9 +37,7 @@ class AnniversariesIntegrationSpec extends Specification {
             assert anniversary.id != null
             assert anniversary.name == 'Foo'
             assert anniversary.hireDate == '2016-11-01'
-            anniversariesDates.add(anniversary.anniversaryDate)
+            expectedDates.contains(anniversary.anniversaryDate)
         }
-        expectedDates.size() == anniversariesDates.size()
-        expectedDates.containsAll(anniversariesDates)
     }
 }
