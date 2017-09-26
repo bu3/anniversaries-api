@@ -25,4 +25,5 @@ data class Anniversary(
 
 interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
     fun findAllByOrderByAnniversaryDateAsc() : List<Anniversary>
+    fun findByAnniversaryDateLessThanOrderByAnniversaryDateAsc(anniversaryDate: LocalDate) : List<Anniversary>
 }

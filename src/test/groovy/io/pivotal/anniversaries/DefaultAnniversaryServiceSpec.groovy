@@ -28,6 +28,18 @@ class DefaultAnniversaryServiceSpec extends Specification {
         anniversaries == expectedAnniversaries
     }
 
+    def "Should load data from database by time interval"() {
+        given:
+        def expectedAnniversaries = [new Anniversary(1, 'foo', LocalDate.MIN, LocalDate.MAX)]
+
+        when:
+        def anniversaries = anniversaryService.loadAnniversariesWithinMonths(3)
+
+        then:
+        1 * anniversaryRepository.findByAnniversaryDateLessThanOrderByAnniversaryDateAsc(LocalDate.now().plusMonths(3)) >> expectedAnniversaries
+        anniversaries == expectedAnniversaries
+    }
+
     def "Should manage an employee created event"() {
         given:
         def employee = new Employee(1, 'Foo', LocalDate.now())

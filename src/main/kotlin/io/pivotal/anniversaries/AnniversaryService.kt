@@ -3,11 +3,13 @@ package io.pivotal.anniversaries
 import io.pivotal.employees.EmployeeCreatedEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
+import java.time.LocalDate
 
 val INITIAL_ANNIVERSARIES = 29
 
 interface AnniversaryService {
     fun loadAnniversaries(): List<Anniversary>
+    fun loadAnniversariesWithinMonths(months:Int): List<Anniversary>
     fun handleEmployeeCreatedEvent(employeeCreatedEvent: EmployeeCreatedEvent)
 }
 
@@ -16,6 +18,10 @@ class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository
 
     override fun loadAnniversaries(): List<Anniversary> {
         return anniversaryRepository.findAllByOrderByAnniversaryDateAsc()
+    }
+
+    override fun loadAnniversariesWithinMonths(months: Int): List<Anniversary> {
+        return anniversaryRepository.findByAnniversaryDateLessThanOrderByAnniversaryDateAsc(LocalDate.now().plusMonths(months.toLong()))
     }
 
     @EventListener

@@ -14,10 +14,10 @@ class AnniversaryControllerSpec extends Specification {
         AnniversaryController anniversaryController = new AnniversaryController(anniversaryService)
 
         when:
-        def anniversaries = anniversaryController.getAnniversaries()
+        def anniversaries = anniversaryController.getAnniversaries(null)
 
         then:
-        anniversaryService.loadAnniversaries() >> [expectedAnniversaries]
+        1 * anniversaryService.loadAnniversaries() >> [expectedAnniversaries]
         anniversaries == [expectedAnniversaries]
     }
 }
