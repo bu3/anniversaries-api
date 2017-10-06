@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 interface EmployeeService {
     fun store(employee: Employee): Employee
     fun loadEmployees(): List<Employee>
+    fun delete(employee: Employee)
 }
 
 @Service
@@ -18,5 +19,9 @@ class DefaultEmployeeService(val employeeRepository: EmployeeRepository, val pub
 
     override fun loadEmployees(): List<Employee> {
         return employeeRepository.findAll()
+    }
+
+    override fun delete(employee: Employee) {
+        employeeRepository.delete(employee)
     }
 }

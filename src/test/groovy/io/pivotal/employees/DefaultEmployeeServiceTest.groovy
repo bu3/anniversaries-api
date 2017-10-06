@@ -35,7 +35,7 @@ class DefaultEmployeeServiceTest extends Specification {
 
     def "Should load employees"() {
         given:
-        def employee = new Employee(1, 'foo', LocalDate.of(2016,1,1))
+        def employee = new Employee(1, 'foo', LocalDate.of(2016, 1, 1))
 
         when:
         def employees = employeeService.loadEmployees()
@@ -45,5 +45,16 @@ class DefaultEmployeeServiceTest extends Specification {
         employees[0].id == employee.id
         employees[0].name == employee.name
         employees[0].hireDate == employee.hireDate
+    }
+
+    def "Should delete an employee"() {
+        given:
+        def employee = new Employee(1, 'Foo', LocalDate.MIN)
+
+        when:
+        employeeService.delete(employee)
+
+        then:
+        1 * employeeRepository.delete(employee)
     }
 }
