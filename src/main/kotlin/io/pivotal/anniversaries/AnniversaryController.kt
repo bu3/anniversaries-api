@@ -9,13 +9,11 @@ class AnniversaryController(val anniversaryService: AnniversaryService) {
     @ResponseBody
     @GetMapping("/anniversaries")
     fun getAnniversaries(@RequestParam( value="months", required = false) months: Number?): List<Anniversary> {
-
-        if(months == null){
-            return anniversaryService.loadAnniversaries()
+        return if(months == null){
+            anniversaryService.loadAnniversaries()
         } else{
-            return anniversaryService.loadAnniversariesWithinMonths(3)
+            anniversaryService.loadAnniversariesWithinMonths(3)
         }
-
     }
 
 }
