@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 
-@Profile("default")
+@Profile("default", "cloud")
 @Component
 class DataSetupRunner(val employeeService: EmployeeService) : ApplicationRunner {
 
