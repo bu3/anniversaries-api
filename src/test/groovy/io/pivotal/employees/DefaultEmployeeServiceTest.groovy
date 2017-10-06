@@ -56,5 +56,8 @@ class DefaultEmployeeServiceTest extends Specification {
 
         then:
         1 * employeeRepository.delete(employee)
+        1 * publisher.publishEvent(_ as EmployeeDeletedEvent) >> { args ->
+            assert args[0].employee == employee
+        }
     }
 }

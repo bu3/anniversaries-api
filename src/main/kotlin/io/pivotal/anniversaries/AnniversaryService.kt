@@ -1,6 +1,7 @@
 package io.pivotal.anniversaries
 
 import io.pivotal.employees.EmployeeCreatedEvent
+import io.pivotal.employees.EmployeeDeletedEvent
 import org.springframework.context.event.EventListener
 import org.springframework.stereotype.Service
 import java.time.LocalDate
@@ -11,6 +12,7 @@ interface AnniversaryService {
     fun loadAnniversaries(): List<Anniversary>
     fun loadAnniversariesWithinMonths(months:Int): List<Anniversary>
     fun handleEmployeeCreatedEvent(employeeCreatedEvent: EmployeeCreatedEvent)
+    fun handleEmployeeDeletedEvent(employeeDeletedEvent: EmployeeDeletedEvent)
 }
 
 @Service
@@ -30,8 +32,13 @@ class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository
         val firstAnniversary = calculateAnniversaryDate(employee.hireDate)
         val anniversaries = arrayListOf<Anniversary>()
         (0..INITIAL_ANNIVERSARIES step 1).forEach { index ->
-            anniversaries.add(Anniversary(name=employee.name, hireDate = employee.hireDate, anniversaryDate = firstAnniversary.plusYears(index.toLong())))
+            anniversaries.add(Anniversary(name=employee.name, employeeId = employee.id!!, hireDate = employee.hireDate, anniversaryDate = firstAnniversary.plusYears(index.toLong())))
         }
         anniversaryRepository.save(anniversaries)
+    }
+
+    @EventListener
+    override fun handleEmployeeDeletedEvent(employeeDeletedEvent: EmployeeDeletedEvent) {
+        anniversaryRepository.deleteByEmployeeId(employeeDeletedEvent.employee.id!!)
     }
 }

@@ -2,6 +2,7 @@ package io.pivotal.anniversaries
 
 import io.pivotal.employees.Employee
 import io.pivotal.employees.EmployeeCreatedEvent
+import io.pivotal.employees.EmployeeDeletedEvent
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -18,7 +19,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
 
     def "Should load data from database"() {
         given:
-        def expectedAnniversaries = [new Anniversary(1, 'foo', LocalDate.MIN, LocalDate.MAX)]
+        def expectedAnniversaries = [new Anniversary(1, 1, 'foo', LocalDate.MIN, LocalDate.MAX)]
 
         when:
         def anniversaries = anniversaryService.loadAnniversaries()
@@ -30,7 +31,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
 
     def "Should load data from database by time interval"() {
         given:
-        def expectedAnniversaries = [new Anniversary(1, 'foo', LocalDate.MIN, LocalDate.MAX)]
+        def expectedAnniversaries = [new Anniversary(1, 2, 'foo', LocalDate.MIN, LocalDate.MAX)]
 
         when:
         def anniversaries = anniversaryService.loadAnniversariesWithinMonths(3)
@@ -54,10 +55,22 @@ class DefaultAnniversaryServiceSpec extends Specification {
             anniversaries.size() == 30
             anniversaries.each { anniversary ->
                 assert anniversary.name == employee.name
+                assert anniversary.employeeId == 1
                 assert anniversary.hireDate == employee.hireDate
                 assert anniversary.anniversaryDate != null
             }
         }
+    }
 
+    def "Should delete anniversaries when an employee gets deleted"() {
+        given:
+        def employee = new Employee(109, 'Foo', LocalDate.now())
+        def employeeDeletedEvent = new EmployeeDeletedEvent(employee)
+
+        when:
+        anniversaryService.handleEmployeeDeletedEvent(employeeDeletedEvent)
+
+        then:
+        1 * anniversaryRepository.deleteByEmployeeId(109)
     }
 }

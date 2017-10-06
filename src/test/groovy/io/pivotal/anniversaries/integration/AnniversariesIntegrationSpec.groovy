@@ -3,6 +3,8 @@ package io.pivotal.anniversaries.integration
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
@@ -40,6 +42,7 @@ class AnniversariesIntegrationSpec extends Specification {
         response.body.size() == 30
         response.body.each { anniversary ->
             assert anniversary.id != null
+            assert anniversary.employeeId == 1
             assert anniversary.name == 'Foo'
             assert anniversary.hireDate == '2016-11-01'
             expectedDates.contains(anniversary.anniversaryDate)
@@ -55,9 +58,32 @@ class AnniversariesIntegrationSpec extends Specification {
         response.body.size() == 1
         response.body.each { anniversary ->
             assert anniversary.id != null
+            assert anniversary.employeeId == 1
             assert anniversary.name == 'Foo'
             assert anniversary.hireDate == '2016-11-01'
             assert anniversary.anniversaryDate == '2017-11-01'
         }
+    }
+
+    def "Should delete anniversaries if an employee gets deleted"() {
+        when:
+        def response = restTemplate.getForEntity('/anniversaries?months={months}', List, ['months' : '2'])
+
+        then:
+        response.statusCode == HttpStatus.OK
+        response.body.size() == 1
+
+        when:
+        response = restTemplate.exchange('/employees/1', HttpMethod.DELETE, new HttpEntity<Object>(""), String)
+
+        then:
+        response.statusCode == HttpStatus.NO_CONTENT
+
+        when:
+        response = restTemplate.getForEntity('/anniversaries?months={months}', List, ['months' : '2'])
+
+        then:
+        response.statusCode == HttpStatus.OK
+        response.body.size() == 0
     }
 }

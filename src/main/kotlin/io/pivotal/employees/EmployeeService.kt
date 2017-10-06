@@ -23,5 +23,6 @@ class DefaultEmployeeService(val employeeRepository: EmployeeRepository, val pub
 
     override fun delete(employee: Employee) {
         employeeRepository.delete(employee)
+        publisher.publishEvent(EmployeeDeletedEvent(employee))
     }
 }
