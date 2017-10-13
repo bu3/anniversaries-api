@@ -1,7 +1,9 @@
-package io.pivotal.anniversaries.integration
+package io.github.bu3.anniversaries.integration
 
-import io.pivotal.employees.Employee
-import io.pivotal.employees.EmployeeRepository
+import io.github.bu3.employees.Employee
+import io.github.bu3.employees.EmployeeRepository
+import io.github.bu3.employees.Employee
+import io.github.bu3.employees.EmployeeRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification

@@ -1,4 +1,4 @@
-package io.pivotal.healthcheck
+package io.github.bu3.healthcheck
 
 import org.springframework.boot.actuate.health.Health
 import org.springframework.boot.actuate.health.HealthIndicator

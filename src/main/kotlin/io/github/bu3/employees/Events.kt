@@ -1,4 +1,4 @@
-package io.pivotal.employees
+package io.github.bu3.employees
 
 
 class EmployeeCreatedEvent(var employee: Employee)

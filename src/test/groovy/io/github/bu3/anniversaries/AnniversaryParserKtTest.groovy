@@ -1,10 +1,10 @@
-package io.pivotal.anniversaries
+package io.github.bu3.anniversaries
 
 import spock.lang.Specification
 
 import java.time.LocalDate
 
-import static io.pivotal.anniversaries.AnniversaryParserKt.calculateAnniversaryDate
+import static io.github.bu3.anniversaries.AnniversaryParserKt.calculateAnniversaryDate
 
 
 class AnniversaryParserKtTest extends Specification {

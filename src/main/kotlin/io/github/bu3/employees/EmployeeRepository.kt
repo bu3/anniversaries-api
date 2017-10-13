@@ -1,4 +1,4 @@
-package io.pivotal.employees
+package io.github.bu3.employees
 
 import org.jetbrains.annotations.NotNull
 import org.springframework.data.jpa.repository.JpaRepository

@@ -1,4 +1,4 @@
-package io.pivotal.employees
+package io.github.bu3.employees
 
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.NO_CONTENT

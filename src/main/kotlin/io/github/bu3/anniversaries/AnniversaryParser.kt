@@ -1,4 +1,4 @@
-package io.pivotal.anniversaries
+package io.github.bu3.anniversaries
 
 import java.time.LocalDate
 import java.time.Month

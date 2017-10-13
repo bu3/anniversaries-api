@@ -1,4 +1,4 @@
-package io.pivotal.anniversaries
+package io.github.bu3.anniversaries
 
 import org.springframework.web.bind.annotation.*
 

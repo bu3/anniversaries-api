@@ -1,4 +1,4 @@
-package io.pivotal.anniversaries.integration
+package io.github.bu3.anniversaries.integration
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest

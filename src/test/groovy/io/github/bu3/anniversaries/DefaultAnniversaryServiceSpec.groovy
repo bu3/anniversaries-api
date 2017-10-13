@@ -1,8 +1,11 @@
-package io.pivotal.anniversaries
+package io.github.bu3.anniversaries
 
-import io.pivotal.employees.Employee
-import io.pivotal.employees.EmployeeCreatedEvent
-import io.pivotal.employees.EmployeeDeletedEvent
+import io.github.bu3.employees.Employee
+import io.github.bu3.employees.EmployeeCreatedEvent
+import io.github.bu3.employees.EmployeeDeletedEvent
+import io.github.bu3.employees.Employee
+import io.github.bu3.employees.EmployeeCreatedEvent
+import io.github.bu3.employees.EmployeeDeletedEvent
 import spock.lang.Specification
 
 import java.time.LocalDate
