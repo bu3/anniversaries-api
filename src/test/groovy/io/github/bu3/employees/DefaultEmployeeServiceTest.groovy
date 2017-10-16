@@ -19,8 +19,8 @@ class DefaultEmployeeServiceTest extends Specification {
 
     def "Should save a new employee"() {
         given:
-        def employee = new Employee(null, 'Foo', LocalDate.now())
-        def expectedEmployee = new Employee(1, 'Foo', LocalDate.now())
+        def employee = new Employee(null, 'Foo', "photo Url", LocalDate.now())
+        def expectedEmployee = new Employee(1, 'Foo', "photo Url", LocalDate.now())
 
         when:
         def result = employeeService.store(employee)
@@ -35,7 +35,7 @@ class DefaultEmployeeServiceTest extends Specification {
 
     def "Should load employees"() {
         given:
-        def employee = new Employee(1, 'foo', LocalDate.of(2016, 1, 1))
+        def employee = new Employee(1, 'foo', "photo Url", LocalDate.of(2016, 1, 1))
 
         when:
         def employees = employeeService.loadEmployees()
@@ -49,7 +49,7 @@ class DefaultEmployeeServiceTest extends Specification {
 
     def "Should delete an employee"() {
         given:
-        def employee = new Employee(1, 'Foo', LocalDate.MIN)
+        def employee = new Employee(1, 'Foo', "photo Url", LocalDate.MIN)
 
         when:
         employeeService.delete(employee)

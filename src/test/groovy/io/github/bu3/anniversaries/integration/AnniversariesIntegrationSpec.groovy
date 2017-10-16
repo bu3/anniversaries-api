@@ -22,8 +22,10 @@ class AnniversariesIntegrationSpec extends Specification {
     @Autowired
     TestRestTemplate restTemplate
 
+    def employee = [name: 'Foo', hireDate: '2016-11-01', photoURL: 'http://cool.photo.jpg']
+
     void setup() {
-        def response = restTemplate.postForEntity('/employees', [name: 'Foo', hireDate: '2016-11-01'], String, [])
+        def response = restTemplate.postForEntity('/employees', employee, String, [])
         assert response.statusCode == HttpStatus.CREATED
     }
 
@@ -43,8 +45,9 @@ class AnniversariesIntegrationSpec extends Specification {
         response.body.each { anniversary ->
             assert anniversary.id != null
             assert anniversary.employeeId == 1
-            assert anniversary.name == 'Foo'
-            assert anniversary.hireDate == '2016-11-01'
+            assert anniversary.name == employee.name
+            assert anniversary.hireDate == employee.hireDate
+            assert anniversary.photoURL == employee.photoURL
             expectedDates.contains(anniversary.anniversaryDate)
         }
     }
@@ -59,8 +62,9 @@ class AnniversariesIntegrationSpec extends Specification {
         response.body.each { anniversary ->
             assert anniversary.id != null
             assert anniversary.employeeId == 1
-            assert anniversary.name == 'Foo'
-            assert anniversary.hireDate == '2016-11-01'
+            assert anniversary.name == employee.name
+            assert anniversary.hireDate == employee.hireDate
+            assert anniversary.photoURL == employee.photoURL
             assert anniversary.anniversaryDate == '2017-11-01'
         }
     }

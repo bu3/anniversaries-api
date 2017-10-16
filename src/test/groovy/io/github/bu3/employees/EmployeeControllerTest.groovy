@@ -17,8 +17,8 @@ class EmployeeControllerTest extends Specification {
 
     def "Should add a new employee"() {
         given:
-        def employee = new Employee(null, 'Foo', LocalDate.now())
-        def expectedEmployee = new Employee(1, 'Foo', LocalDate.now())
+        def employee = new Employee(null, 'Foo', "photo url", LocalDate.now())
+        def expectedEmployee = new Employee(1, 'Foo', "photo url", LocalDate.now())
 
         when:
         def result = employeeController.addEmployee(employee)
@@ -30,7 +30,7 @@ class EmployeeControllerTest extends Specification {
 
     def "Should return a list of employees"() {
         given:
-        def employees = [new Employee(1, 'Foo', LocalDate.MIN)]
+        def employees = [new Employee(1, 'Foo', "photo url", LocalDate.MIN)]
 
         when:
         def response = employeeController.loadEmployees()
@@ -42,7 +42,7 @@ class EmployeeControllerTest extends Specification {
 
     def "Should delete an employee"() {
         given:
-        def employee = new Employee(1, 'Foo', LocalDate.MIN)
+        def employee = new Employee(1, 'Foo', "photo url", LocalDate.MIN)
 
         when:
         employeeController.deleteEmployee(employee)

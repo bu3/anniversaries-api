@@ -21,7 +21,7 @@ class EmployeesIntegrationSpec extends Specification{
     TestRestTemplate restTemplate
 
     def "Should expose employee API"() {
-        def employee = [name: 'Foo', hireDate: '2016-11-01']
+        def employee = [name: 'Foo', hireDate: '2016-11-01', photoURL: 'http://cool.photo.jpg']
 
         when:
         def response = restTemplate.postForEntity('/employees', employee, String, [])
@@ -40,6 +40,7 @@ class EmployeesIntegrationSpec extends Specification{
             assert id == 1
             assert name == employee.name
             assert hireDate == employee.hireDate
+            assert photoURL == employee.photoURL
         }
 
         when:

@@ -32,7 +32,7 @@ class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository
         val firstAnniversary = calculateAnniversaryDate(employee.hireDate)
         val anniversaries = arrayListOf<Anniversary>()
         (0..INITIAL_ANNIVERSARIES step 1).forEach { index ->
-            anniversaries.add(Anniversary(name = employee.name, employeeId = employee.id!!, hireDate = employee.hireDate, anniversaryDate = firstAnniversary.plusYears(index.toLong())))
+            anniversaries.add(Anniversary(name = employee.name, employeeId = employee.id!!, hireDate = employee.hireDate, anniversaryDate = firstAnniversary.plusYears(index.toLong()), photoURL = employee.photoURL))
         }
         anniversaryRepository.save(anniversaries)
     }

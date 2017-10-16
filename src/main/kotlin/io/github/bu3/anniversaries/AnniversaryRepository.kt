@@ -24,9 +24,12 @@ data class Anniversary(
         val hireDate: LocalDate,
 
         @NotNull
-        var anniversaryDate: LocalDate
+        var anniversaryDate: LocalDate,
+
+        @NotNull
+        val photoURL: String?
 ) {
-    constructor() : this(name = "", employeeId = Long.MIN_VALUE, hireDate = LocalDate.MIN, anniversaryDate = LocalDate.MAX)
+    constructor() : this(name = "", employeeId = Long.MIN_VALUE, hireDate = LocalDate.MIN, anniversaryDate = LocalDate.MAX, photoURL = null)
 }
 
 interface AnniversaryRepository : JpaRepository<Anniversary, Long> {

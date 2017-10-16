@@ -2,8 +2,6 @@ package io.github.bu3.anniversaries.integration
 
 import io.github.bu3.employees.Employee
 import io.github.bu3.employees.EmployeeRepository
-import io.github.bu3.employees.Employee
-import io.github.bu3.employees.EmployeeRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import spock.lang.Specification
@@ -26,7 +24,7 @@ class EmployeesPersistenceIntegrationSpec extends Specification{
 
     def "Should save and load records"() {
         given:
-        def anniversary = new Employee(null, 'Foo', LocalDate.MAX)
+        def anniversary = new Employee(null, 'Foo', "photo Url", LocalDate.MAX)
 
         when:
         repository.save(anniversary)

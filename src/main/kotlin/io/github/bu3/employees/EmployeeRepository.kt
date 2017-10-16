@@ -17,9 +17,12 @@ data class Employee(
         @NotNull
         val name: String,
         @NotNull
+        val photoURL: String?,
+        @NotNull
         val hireDate: LocalDate
+
 ) {
-    constructor() : this(name = "", hireDate = LocalDate.MIN)
+    constructor() : this(name = "", hireDate = LocalDate.MIN, photoURL = null)
 }
 
 interface EmployeeRepository : JpaRepository<Employee, Long>

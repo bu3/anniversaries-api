@@ -3,9 +3,6 @@ package io.github.bu3.anniversaries
 import io.github.bu3.employees.Employee
 import io.github.bu3.employees.EmployeeCreatedEvent
 import io.github.bu3.employees.EmployeeDeletedEvent
-import io.github.bu3.employees.Employee
-import io.github.bu3.employees.EmployeeCreatedEvent
-import io.github.bu3.employees.EmployeeDeletedEvent
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -22,7 +19,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
 
     def "Should load data from database"() {
         given:
-        def expectedAnniversaries = [new Anniversary(1, 1, 'foo', LocalDate.MIN, LocalDate.MAX)]
+        def expectedAnniversaries = [new Anniversary(1, 1, 'foo', LocalDate.MIN, LocalDate.MAX, 'photo url')]
 
         when:
         def anniversaries = anniversaryService.loadAnniversaries()
@@ -34,7 +31,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
 
     def "Should load data from database by time interval"() {
         given:
-        def expectedAnniversaries = [new Anniversary(1, 2, 'foo', LocalDate.MIN, LocalDate.MAX)]
+        def expectedAnniversaries = [new Anniversary(1, 2, 'foo', LocalDate.MIN, LocalDate.MAX, 'photo url')]
 
         when:
         def anniversaries = anniversaryService.loadAnniversariesWithinMonths(3)
@@ -46,7 +43,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
 
     def "Should manage an employee created event"() {
         given:
-        def employee = new Employee(1, 'Foo', LocalDate.now())
+        def employee = new Employee(1, 'Foo', 'photo url', LocalDate.now())
         def employeeCreatedEvent = new EmployeeCreatedEvent(employee)
 
         when:
@@ -60,6 +57,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
                 assert anniversary.name == employee.name
                 assert anniversary.employeeId == 1
                 assert anniversary.hireDate == employee.hireDate
+                assert anniversary.photoURL == employee.photoURL
                 assert anniversary.anniversaryDate != null
             }
         }
@@ -67,7 +65,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
 
     def "Should delete anniversaries when an employee gets deleted"() {
         given:
-        def employee = new Employee(109, 'Foo', LocalDate.now())
+        def employee = new Employee(109, 'Foo', 'photo url', LocalDate.now())
         def employeeDeletedEvent = new EmployeeDeletedEvent(employee)
 
         when:
