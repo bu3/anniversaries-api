@@ -1,8 +1,16 @@
 package io.github.bu3.employees
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers
+import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import java.time.LocalDate
+
+import static org.springframework.http.MediaType.APPLICATION_JSON
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 
 class EmployeeControllerTest extends Specification {
@@ -49,5 +57,29 @@ class EmployeeControllerTest extends Specification {
 
         then:
         1 * employeeService.delete(employee)
+    }
+
+    @Unroll("#type")
+    def "Should validate request"() {
+        given:
+        def mockEmployeeService = Mock(EmployeeService)
+        def employeeController = new EmployeeController(mockEmployeeService)
+        def mvc = MockMvcBuilders.standaloneSetup(employeeController).build()
+
+        when:
+        def request = mvc.perform(
+                post("/employees")
+                        .contentType(APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsBytes(employee)))
+
+        then:
+        request.andDo(MockMvcResultHandlers.print())
+                .andExpect(status().isBadRequest())
+
+        where:
+        employee                                             | type                | _
+        [hireDate: '2016-11-01', photoURL: 'http://url.com'] | 'invalid name'      | _
+        [name: 'Foo', photoURL: 'http://url.com']            | 'invalid hire date' | _
+        [name: 'Foo', hireDate: '2016-11-01', photoURL: "1"] | 'invalid photo url' | _
     }
 }

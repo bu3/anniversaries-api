@@ -15,7 +15,7 @@ import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFOR
 @ActiveProfiles("test")
 @DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class EmployeesIntegrationSpec extends Specification{
+class EmployeesIntegrationSpec extends Specification {
 
     @Autowired
     TestRestTemplate restTemplate
@@ -56,6 +56,4 @@ class EmployeesIntegrationSpec extends Specification{
         response.statusCode == HttpStatus.OK
         response.body.size() == 0
     }
-
-
 }

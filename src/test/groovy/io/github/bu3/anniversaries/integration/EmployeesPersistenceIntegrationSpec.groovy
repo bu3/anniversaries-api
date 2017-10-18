@@ -24,7 +24,7 @@ class EmployeesPersistenceIntegrationSpec extends Specification{
 
     def "Should save and load records"() {
         given:
-        def anniversary = new Employee(null, 'Foo', "photo Url", LocalDate.MAX)
+        def anniversary = new Employee(null, 'Foo', "http://url.com", LocalDate.MAX)
 
         when:
         repository.save(anniversary)

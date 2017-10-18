@@ -1,24 +1,28 @@
 package io.github.bu3.employees
 
-import org.jetbrains.annotations.NotNull
+import org.hibernate.validator.constraints.URL
 import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDate
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.validation.constraints.NotNull
 
 
 @Entity
 data class Employee(
         @Id
-        @GeneratedValue(strategy= GenerationType.AUTO)
+        @GeneratedValue(strategy = GenerationType.AUTO)
         val id: Long? = null,
-        @NotNull
+
+        @field:NotNull
         val name: String,
-        @NotNull
+
+        @field:URL
         val photoURL: String?,
-        @NotNull
+
+        @field:NotNull
         val hireDate: LocalDate
 
 ) {
