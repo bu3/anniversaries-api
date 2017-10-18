@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service
 interface EmployeeService {
     fun store(employee: Employee): Employee
     fun loadEmployees(): List<Employee>
-    fun delete(employee: Employee)
+    fun delete(employeeId: Long)
 }
 
 @Service
@@ -21,8 +21,11 @@ class DefaultEmployeeService(val employeeRepository: EmployeeRepository, val pub
         return employeeRepository.findAll()
     }
 
-    override fun delete(employee: Employee) {
-        employeeRepository.delete(employee)
-        publisher.publishEvent(EmployeeDeletedEvent(employee))
+    override fun delete(employeeId: Long) {
+        val employee = employeeRepository.findOne(employeeId)
+        employeeRepository.delete(employeeId)
+        if (employee != null) {
+            publisher.publishEvent(EmployeeDeletedEvent(employee))
+        }
     }
 }

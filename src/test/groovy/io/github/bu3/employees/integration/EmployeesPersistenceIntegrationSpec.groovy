@@ -1,4 +1,4 @@
-package io.github.bu3.anniversaries.integration
+package io.github.bu3.employees.integration
 
 import io.github.bu3.employees.Employee
 import io.github.bu3.employees.EmployeeRepository

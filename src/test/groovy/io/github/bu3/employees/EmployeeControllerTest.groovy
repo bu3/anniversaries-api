@@ -49,14 +49,11 @@ class EmployeeControllerTest extends Specification {
     }
 
     def "Should delete an employee"() {
-        given:
-        def employee = new Employee(1, 'Foo', "photo url", LocalDate.MIN)
-
         when:
-        employeeController.deleteEmployee(employee)
+        employeeController.deleteEmployee(1)
 
         then:
-        1 * employeeService.delete(employee)
+        1 * employeeService.delete(1)
     }
 
     @Unroll("#type")

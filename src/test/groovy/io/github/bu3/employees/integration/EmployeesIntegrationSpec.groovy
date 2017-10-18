@@ -1,15 +1,14 @@
-package io.github.bu3.anniversaries.integration
+package io.github.bu3.employees.integration
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.http.HttpEntity
-import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 
+import static org.springframework.http.HttpMethod.DELETE
 import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD
 
 @ActiveProfiles("test")
@@ -44,7 +43,7 @@ class EmployeesIntegrationSpec extends Specification {
         }
 
         when:
-        response = restTemplate.exchange('/employees/1', HttpMethod.DELETE, new HttpEntity<Object>(""), String)
+        response = restTemplate.exchange('/employees/1', DELETE, null, String)
 
         then:
         response.statusCode == HttpStatus.NO_CONTENT

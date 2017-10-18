@@ -7,7 +7,7 @@ import java.time.LocalDate
 
 class DefaultEmployeeServiceTest extends Specification {
 
-    def employeeRepository
+    EmployeeRepository employeeRepository
     def publisher
     def employeeService
 
@@ -47,17 +47,31 @@ class DefaultEmployeeServiceTest extends Specification {
         employees[0].hireDate == employee.hireDate
     }
 
-    def "Should delete an employee"() {
+    def "Should delete an employee and send an event"() {
         given:
         def employee = new Employee(1, 'Foo', "photo Url", LocalDate.MIN)
 
         when:
-        employeeService.delete(employee)
+        employeeService.delete(1)
 
         then:
-        1 * employeeRepository.delete(employee)
+        1 * employeeRepository.findOne(1) >> employee
+        1 * employeeRepository.delete(1)
         1 * publisher.publishEvent(_ as EmployeeDeletedEvent) >> { args ->
             assert args[0].employee == employee
         }
+    }
+
+    def "Should not send an event if the employee does not exist when deleting"() {
+        given:
+        def employee = new Employee(1, 'Foo', "photo Url", LocalDate.MIN)
+
+        when:
+        employeeService.delete(1)
+
+        then:
+        1 * employeeRepository.findOne(1) >> null
+        1 * employeeRepository.delete(1)
+        0 * publisher.publishEvent(_ as EmployeeDeletedEvent)
     }
 }
