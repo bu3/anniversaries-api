@@ -9,12 +9,14 @@ import java.time.LocalDate
 
 class DefaultAnniversaryServiceSpec extends Specification {
 
+    def anniversaryParser
     def anniversaryService
     def anniversaryRepository
 
     void setup() {
+        anniversaryParser = Mock(AnniversaryParser)
         anniversaryRepository = Mock(AnniversaryRepository)
-        anniversaryService = new DefaultAnniversaryService(anniversaryRepository)
+        anniversaryService = new DefaultAnniversaryService(anniversaryRepository, anniversaryParser)
     }
 
     def "Should load data from database"() {
@@ -43,22 +45,24 @@ class DefaultAnniversaryServiceSpec extends Specification {
 
     def "Should manage an employee created event"() {
         given:
-        def employee = new Employee(1, 'Foo', 'photo url', LocalDate.now())
+        def anniversaryDate = LocalDate.of(2018, 11, 1)
+        def employee = new Employee(1, 'Foo', 'photo url', LocalDate.of(2017,11,1))
         def employeeCreatedEvent = new EmployeeCreatedEvent(employee)
 
         when:
         anniversaryService.handleEmployeeCreatedEvent(employeeCreatedEvent)
 
         then:
+        1 * anniversaryParser.calculateAnniversaryDate(employee.hireDate) >> anniversaryDate
         1 * anniversaryRepository.save(_ as List<Anniversary>) >> { args ->
             def anniversaries = args[0]
             anniversaries.size() == 30
-            anniversaries.each { anniversary ->
+            anniversaries.eachWithIndex { anniversary, index ->
                 assert anniversary.name == employee.name
                 assert anniversary.employeeId == 1
                 assert anniversary.hireDate == employee.hireDate
                 assert anniversary.photoURL == employee.photoURL
-                assert anniversary.anniversaryDate != null
+                assert anniversary.anniversaryDate == anniversaryDate.plusYears(index)
             }
         }
     }

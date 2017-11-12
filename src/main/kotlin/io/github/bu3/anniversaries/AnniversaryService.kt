@@ -16,7 +16,7 @@ interface AnniversaryService {
 }
 
 @Service
-class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository) : AnniversaryService {
+class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository, val anniversaryParser: AnniversaryParser) : AnniversaryService {
 
     override fun loadAnniversaries(): List<Anniversary> {
         return anniversaryRepository.findAllByOrderByAnniversaryDateAsc()
@@ -29,7 +29,7 @@ class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository
     @EventListener
     override fun handleEmployeeCreatedEvent(employeeCreatedEvent: EmployeeCreatedEvent) {
         val employee = employeeCreatedEvent.employee
-        val firstAnniversary = calculateAnniversaryDate(employee.hireDate)
+        val firstAnniversary = anniversaryParser.calculateAnniversaryDate(employee.hireDate)
         val anniversaries = arrayListOf<Anniversary>()
         (0..INITIAL_ANNIVERSARIES step 1).forEach { index ->
             anniversaries.add(Anniversary(name = employee.name, employeeId = employee.id!!, hireDate = employee.hireDate, anniversaryDate = firstAnniversary.plusYears(index.toLong()), photoURL = employee.photoURL))
