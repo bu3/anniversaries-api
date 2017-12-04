@@ -10,7 +10,7 @@ val INITIAL_ANNIVERSARIES = 29
 
 interface AnniversaryService {
     fun loadAnniversaries(): List<Anniversary>
-    fun loadAnniversariesWithinMonths(months:Int): List<Anniversary>
+    fun loadAnniversariesWithinMonths(months: Int): List<Anniversary>
     fun handleEmployeeCreatedEvent(employeeCreatedEvent: EmployeeCreatedEvent)
     fun handleEmployeeDeletedEvent(employeeDeletedEvent: EmployeeDeletedEvent)
 }

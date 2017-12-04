@@ -9,7 +9,7 @@ interface AnniversaryParser {
 }
 
 @Service
-class DefaultAnniversaryParser(val timeProvider: TimeProvider): AnniversaryParser {
+class DefaultAnniversaryParser(val timeProvider: TimeProvider) : AnniversaryParser {
 
     override fun calculateAnniversaryDate(hiringDate: LocalDate): LocalDate {
         val today = timeProvider.now()
@@ -40,5 +40,3 @@ class DefaultAnniversaryParser(val timeProvider: TimeProvider): AnniversaryParse
         return date.isLeapYear && date.month == Month.FEBRUARY && date.dayOfMonth == 29
     }
 }
-
-

@@ -54,7 +54,7 @@ class AnniversariesIntegrationSpec extends Specification {
 
     def "Should return anniversaries in a time interval"() {
         when:
-        def response = restTemplate.getForEntity('/anniversaries?months={months}', List, ['months' : '2'])
+        def response = restTemplate.getForEntity('/anniversaries?months={months}', List, ['months': '2'])
 
         then:
         response.statusCode == HttpStatus.OK
@@ -71,7 +71,7 @@ class AnniversariesIntegrationSpec extends Specification {
 
     def "Should delete anniversaries if an employee gets deleted"() {
         when:
-        def response = restTemplate.getForEntity('/anniversaries?months={months}', List, ['months' : '2'])
+        def response = restTemplate.getForEntity('/anniversaries?months={months}', List, ['months': '2'])
 
         then:
         response.statusCode == HttpStatus.OK
@@ -84,7 +84,7 @@ class AnniversariesIntegrationSpec extends Specification {
         response.statusCode == HttpStatus.NO_CONTENT
 
         when:
-        response = restTemplate.getForEntity('/anniversaries?months={months}', List, ['months' : '2'])
+        response = restTemplate.getForEntity('/anniversaries?months={months}', List, ['months': '2'])
 
         then:
         response.statusCode == HttpStatus.OK

@@ -10,32 +10,32 @@ import javax.transaction.Transactional
 
 @Entity
 data class Anniversary(
-        @Id
-        @GeneratedValue
-        var id: Long = 0,
+    @Id
+    @GeneratedValue
+    var id: Long = 0,
 
-        @NotNull
-        val employeeId: Long,
+    @NotNull
+    val employeeId: Long,
 
-        @NotNull
-        val name: String,
+    @NotNull
+    val name: String,
 
-        @NotNull
-        val hireDate: LocalDate,
+    @NotNull
+    val hireDate: LocalDate,
 
-        @NotNull
-        var anniversaryDate: LocalDate,
+    @NotNull
+    var anniversaryDate: LocalDate,
 
-        @NotNull
-        val photoURL: String?
+    @NotNull
+    val photoURL: String?
 ) {
     constructor() : this(name = "", employeeId = Long.MIN_VALUE, hireDate = LocalDate.MIN, anniversaryDate = LocalDate.MAX, photoURL = null)
 }
 
 interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
-    fun findAllByOrderByAnniversaryDateAsc() : List<Anniversary>
+    fun findAllByOrderByAnniversaryDateAsc(): List<Anniversary>
 
-    fun findByAnniversaryDateLessThanOrderByAnniversaryDateAsc(anniversaryDate: LocalDate) : List<Anniversary>
+    fun findByAnniversaryDateLessThanOrderByAnniversaryDateAsc(anniversaryDate: LocalDate): List<Anniversary>
 
     @Transactional
     fun deleteByEmployeeId(employeeId: Long): Long

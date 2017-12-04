@@ -9,7 +9,7 @@ import spock.lang.Specification
 import java.time.LocalDate
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class EmployeesPersistenceIntegrationSpec extends Specification{
+class EmployeesPersistenceIntegrationSpec extends Specification {
 
     @Autowired
     EmployeeRepository repository

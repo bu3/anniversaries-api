@@ -9,21 +9,20 @@ import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.validation.constraints.NotNull
 
-
 @Entity
 data class Employee(
-        @Id
-        @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Long? = null,
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: Long? = null,
 
-        @field:NotNull
-        val name: String,
+    @field:NotNull
+    val name: String,
 
-        @field:URL
-        val photoURL: String?,
+    @field:URL
+    val photoURL: String?,
 
-        @field:NotNull
-        val hireDate: LocalDate
+    @field:NotNull
+    val hireDate: LocalDate
 
 ) {
     constructor() : this(name = "", hireDate = LocalDate.MIN, photoURL = null)

@@ -46,7 +46,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
     def "Should manage an employee created event"() {
         given:
         def anniversaryDate = LocalDate.of(2018, 11, 1)
-        def employee = new Employee(1, 'Foo', 'photo url', LocalDate.of(2017,11,1))
+        def employee = new Employee(1, 'Foo', 'photo url', LocalDate.of(2017, 11, 1))
         def employeeCreatedEvent = new EmployeeCreatedEvent(employee)
 
         when:
