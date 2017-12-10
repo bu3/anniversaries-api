@@ -22,6 +22,7 @@ databaseChangeLog:
                     type: bigint
                     constraints:
                       nullable: false
+                      primaryKey: true
                 - column:
                     name: name
                     type: varchar(100)
@@ -35,10 +36,6 @@ databaseChangeLog:
                     type: timestamp
                     constraints:
                       nullable: false
-          - addPrimaryKey:
-              columnNames: id
-              constraintName: pk_employee
-              tableName: employee
           - createTable:
               tableName: anniversary
               columns:
@@ -47,6 +44,7 @@ databaseChangeLog:
                     autoIncrement: true
                     type: bigint
                     constraints:
+                      primaryKey: true
                       nullable: false
                 - column:
                     name: employee_id
@@ -71,7 +69,3 @@ databaseChangeLog:
                 - column:
                     name: photoUrl
                     type: varchar(255)
-          - addPrimaryKey:
-              columnNames: id
-              constraintName: pk_anniversary
-              tableName: anniversary
