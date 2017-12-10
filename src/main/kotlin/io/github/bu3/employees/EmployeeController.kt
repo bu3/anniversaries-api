@@ -1,5 +1,6 @@
 package io.github.bu3.employees
 
+import org.springframework.context.annotation.Profile
 import org.springframework.http.HttpStatus.CREATED
 import org.springframework.http.HttpStatus.NO_CONTENT
 import org.springframework.web.bind.annotation.CrossOrigin
@@ -38,4 +39,12 @@ class EmployeeController(val employeeService: EmployeeService) {
     fun deleteEmployee(@PathVariable("id") id: Number) {
         employeeService.delete(id.toLong())
     }
+
+    @Profile("test")
+    @DeleteMapping
+    @ResponseStatus(NO_CONTENT)
+    fun deleteAllEmployees() {
+        employeeService.deleteAll()
+    }
+
 }

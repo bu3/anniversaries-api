@@ -4,31 +4,33 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpStatus
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 
 import static org.springframework.http.HttpMethod.DELETE
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD
 
 @ActiveProfiles("test")
-@DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class EmployeesIntegrationSpec extends Specification {
 
     @Autowired
     TestRestTemplate restTemplate
 
+    void cleanup() {
+        restTemplate.delete('/employees')
+    }
+
     def "Should expose employee API"() {
-        def employee = [name: 'Foo', hireDate: '2016-11-01', photoURL: 'http://cool.photo.jpg']
+        def employee
 
         when:
-        def response = restTemplate.postForEntity('/employees', employee, String, [])
+        def response = restTemplate.postForEntity('/employees', [name: 'Foo', hireDate: '2016-11-01', photoURL: 'http://cool.photo.jpg'], Map, [])
 
         then:
         response.statusCode == HttpStatus.CREATED
 
         when:
+        employee = response.body
         response = restTemplate.getForEntity('/employees', List)
 
         then:
@@ -36,14 +38,14 @@ class EmployeesIntegrationSpec extends Specification {
         response.body.size() == 1
 
         with(response.body[0]) {
-            assert id == 1
+            assert id == employee.id
             assert name == employee.name
             assert hireDate == employee.hireDate
             assert photoURL == employee.photoURL
         }
 
         when:
-        response = restTemplate.exchange('/employees/1', DELETE, null, String)
+        response = restTemplate.exchange("/employees/${employee.id}", DELETE, null, String)
 
         then:
         response.statusCode == HttpStatus.NO_CONTENT

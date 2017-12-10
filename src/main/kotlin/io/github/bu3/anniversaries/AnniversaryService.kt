@@ -1,5 +1,6 @@
 package io.github.bu3.anniversaries
 
+import io.github.bu3.employees.AllEmployeeDeletedEvent
 import io.github.bu3.employees.EmployeeCreatedEvent
 import io.github.bu3.employees.EmployeeDeletedEvent
 import org.springframework.context.event.EventListener
@@ -13,6 +14,7 @@ interface AnniversaryService {
     fun loadAnniversariesWithinMonths(months: Int): List<Anniversary>
     fun handleEmployeeCreatedEvent(employeeCreatedEvent: EmployeeCreatedEvent)
     fun handleEmployeeDeletedEvent(employeeDeletedEvent: EmployeeDeletedEvent)
+    fun handleAllEmployeesDeletedEvent(allEmployeeDeletedEvent: AllEmployeeDeletedEvent)
 }
 
 @Service
@@ -40,5 +42,10 @@ class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository
     @EventListener
     override fun handleEmployeeDeletedEvent(employeeDeletedEvent: EmployeeDeletedEvent) {
         anniversaryRepository.deleteByEmployeeId(employeeDeletedEvent.employee.id!!)
+    }
+
+    @EventListener
+    override fun handleAllEmployeesDeletedEvent(allEmployeeDeletedEvent: AllEmployeeDeletedEvent) {
+        anniversaryRepository.deleteAll()
     }
 }

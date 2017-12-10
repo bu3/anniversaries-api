@@ -1,0 +1,77 @@
+databaseChangeLog:
+
+  - property:
+      name: clob.type
+      value: clob
+      dbms: H2
+  - property:
+      name: clob.type
+      value: json
+      dbms: mysql
+
+  - changeSet:
+        id: 1
+        author: Bu3
+        changes:
+          - createTable:
+              tableName: employee
+              columns:
+                - column:
+                    name: id
+                    autoIncrement: true
+                    type: bigint
+                    constraints:
+                      nullable: false
+                - column:
+                    name: name
+                    type: varchar(100)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: photoUrl
+                    type: varchar(255)
+                - column:
+                    name: hire_date
+                    type: timestamp
+                    constraints:
+                      nullable: false
+          - addPrimaryKey:
+              columnNames: id
+              constraintName: pk_employee
+              tableName: employee
+          - createTable:
+              tableName: anniversary
+              columns:
+                - column:
+                    name: id
+                    autoIncrement: true
+                    type: bigint
+                    constraints:
+                      nullable: false
+                - column:
+                    name: employee_id
+                    type: bigint
+                    constraints:
+                      nullable: false
+                - column:
+                    name: name
+                    type: varchar(100)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: hire_date
+                    type: datetime
+                    constraints:
+                      nullable: false
+                - column:
+                    name: anniversary_date
+                    type: datetime
+                    constraints:
+                      nullable: false
+                - column:
+                    name: photoUrl
+                    type: varchar(255)
+          - addPrimaryKey:
+              columnNames: id
+              constraintName: pk_anniversary
+              tableName: anniversary

@@ -1,5 +1,6 @@
 package io.github.bu3.anniversaries
 
+import io.github.bu3.employees.AllEmployeeDeletedEvent
 import io.github.bu3.employees.Employee
 import io.github.bu3.employees.EmployeeCreatedEvent
 import io.github.bu3.employees.EmployeeDeletedEvent
@@ -77,5 +78,13 @@ class DefaultAnniversaryServiceSpec extends Specification {
 
         then:
         1 * anniversaryRepository.deleteByEmployeeId(109)
+    }
+
+    def "Should delete all anniversaries when all employees get deleted"() {
+        when:
+        anniversaryService.handleAllEmployeesDeletedEvent(new AllEmployeeDeletedEvent())
+
+        then:
+        1 * anniversaryRepository.deleteAll()
     }
 }

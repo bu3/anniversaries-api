@@ -50,6 +50,8 @@ dependencies {
 	compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
 	compile('com.fasterxml.jackson.datatype:jackson-datatype-jsr310')
 	compile('com.fasterxml.jackson.module:jackson-module-kotlin')
+	compile('org.liquibase:liquibase-core:3.5.3')
+
 	runtime('com.h2database:h2')
 
     testCompile('org.codehaus.groovy:groovy-all:2.4.1')

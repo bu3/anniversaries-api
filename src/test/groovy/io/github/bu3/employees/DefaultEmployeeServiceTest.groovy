@@ -74,4 +74,13 @@ class DefaultEmployeeServiceTest extends Specification {
         1 * employeeRepository.delete(1)
         0 * publisher.publishEvent(_ as EmployeeDeletedEvent)
     }
+
+    def "Should delete all"() {
+        when:
+        employeeService.deleteAll()
+
+        then:
+        1 * employeeRepository.deleteAll()
+        1 * publisher.publishEvent(_ as AllEmployeeDeletedEvent)
+    }
 }

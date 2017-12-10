@@ -56,6 +56,14 @@ class EmployeeControllerTest extends Specification {
         1 * employeeService.delete(1)
     }
 
+    def "Should delete all employees"() {
+        when:
+        employeeController.deleteAllEmployees()
+
+        then:
+        1 * employeeService.deleteAll()
+    }
+
     @Unroll("#type")
     def "Should validate request"() {
         given:

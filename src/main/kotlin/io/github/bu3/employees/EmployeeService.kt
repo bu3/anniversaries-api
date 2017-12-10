@@ -7,6 +7,7 @@ interface EmployeeService {
     fun store(employee: Employee): Employee
     fun loadEmployees(): List<Employee>
     fun delete(employeeId: Long)
+    fun deleteAll()
 }
 
 @Service
@@ -27,5 +28,10 @@ class DefaultEmployeeService(val employeeRepository: EmployeeRepository, val pub
         if (employee != null) {
             publisher.publishEvent(EmployeeDeletedEvent(employee))
         }
+    }
+
+    override fun deleteAll() {
+        employeeRepository.deleteAll()
+        publisher.publishEvent(AllEmployeeDeletedEvent())
     }
 }

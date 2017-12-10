@@ -5,28 +5,30 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpMethod
-import org.springframework.http.HttpStatus
-import org.springframework.test.annotation.DirtiesContext
 import org.springframework.test.context.ActiveProfiles
 import spock.lang.Specification
 
 import java.time.LocalDate
 
-import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD
+import static org.springframework.http.HttpStatus.*
 
 @ActiveProfiles("test")
-@DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class AnniversariesIntegrationSpec extends Specification {
 
     @Autowired
     TestRestTemplate restTemplate
 
-    def employee = [name: 'Foo', hireDate: '2016-11-01', photoURL: 'http://cool.photo.jpg']
+    def employee
 
     void setup() {
-        def response = restTemplate.postForEntity('/employees', employee, String, [])
-        assert response.statusCode == HttpStatus.CREATED
+        def response = restTemplate.postForEntity('/employees', [name: 'Foo', hireDate: '2016-11-01', photoURL: 'http://cool.photo.jpg'], Map, [])
+        assert response.statusCode == CREATED
+        employee = response.body
+    }
+
+    void cleanup() {
+        restTemplate.delete('/employees')
     }
 
     def "Should return all anniversaries"() {
@@ -40,11 +42,11 @@ class AnniversariesIntegrationSpec extends Specification {
         def response = restTemplate.getForEntity('/anniversaries', List)
 
         then:
-        response.statusCode == HttpStatus.OK
+        response.statusCode == OK
         response.body.size() == 30
         response.body.each { anniversary ->
             assert anniversary.id != null
-            assert anniversary.employeeId == 1
+            assert anniversary.employeeId == employee.id
             assert anniversary.name == employee.name
             assert anniversary.hireDate == employee.hireDate
             assert anniversary.photoURL == employee.photoURL
@@ -57,16 +59,15 @@ class AnniversariesIntegrationSpec extends Specification {
         def response = restTemplate.getForEntity('/anniversaries?months={months}', List, ['months': '2'])
 
         then:
-        response.statusCode == HttpStatus.OK
+        response.statusCode == OK
         response.body.size() == 1
-        response.body.each { anniversary ->
-            assert anniversary.id != null
-            assert anniversary.employeeId == 1
-            assert anniversary.name == employee.name
-            assert anniversary.hireDate == employee.hireDate
-            assert anniversary.photoURL == employee.photoURL
-            assert anniversary.anniversaryDate == '2017-11-01'
-        }
+        def anniversary = response.body[0]
+        anniversary.id != null
+        anniversary.employeeId == employee.id
+        anniversary.name == employee.name
+        anniversary.hireDate == employee.hireDate
+        anniversary.photoURL == employee.photoURL
+        anniversary.anniversaryDate == '2017-11-01'
     }
 
     def "Should delete anniversaries if an employee gets deleted"() {
@@ -74,20 +75,20 @@ class AnniversariesIntegrationSpec extends Specification {
         def response = restTemplate.getForEntity('/anniversaries?months={months}', List, ['months': '2'])
 
         then:
-        response.statusCode == HttpStatus.OK
+        response.statusCode == OK
         response.body.size() == 1
 
         when:
-        response = restTemplate.exchange('/employees/1', HttpMethod.DELETE, new HttpEntity<Object>(""), String)
+        response = restTemplate.exchange("/employees/${employee.id}", HttpMethod.DELETE, new HttpEntity<Object>(""), String)
 
         then:
-        response.statusCode == HttpStatus.NO_CONTENT
+        response.statusCode == NO_CONTENT
 
         when:
         response = restTemplate.getForEntity('/anniversaries?months={months}', List, ['months': '2'])
 
         then:
-        response.statusCode == HttpStatus.OK
+        response.statusCode == OK
         response.body.size() == 0
     }
 }
