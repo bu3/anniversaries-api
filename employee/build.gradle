@@ -9,9 +9,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 dependencies {
-
     compile('org.liquibase:liquibase-core:3.5.3')
-    compile project(':employee')
 
     runtime('com.h2database:h2')
 
@@ -20,13 +18,3 @@ dependencies {
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4')
     testCompile('org.spockframework:spock-spring:1.1-groovy-2.4')
 }
-
-
-task testIntegration(type: Test) {
-    include 'io/github/bu3/**/integration/**'
-}
-
-task testUnit(type: Test) {
-    exclude 'io/github/bu3/**/integration/**'
-}
-
