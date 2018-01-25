@@ -28,7 +28,11 @@ class DefaultEmployeeServiceTest extends Specification {
         then:
         1 * employeeRepository.save(employee) >> expectedEmployee
         1 * publisher.publishEvent(_ as EmployeeCreatedEvent) >> { args ->
-            assert args[0].employee == expectedEmployee
+            assert args[0].aggregate.aggregateId != null
+            assert args[0].aggregate.id != null
+            assert args[0].aggregate.name == employee.name
+            assert args[0].aggregate.photoURL == employee.photoURL
+            assert args[0].aggregate.hireDate == employee.hireDate
         }
         result == expectedEmployee
     }
@@ -58,7 +62,11 @@ class DefaultEmployeeServiceTest extends Specification {
         1 * employeeRepository.findOne(1) >> employee
         1 * employeeRepository.delete(1)
         1 * publisher.publishEvent(_ as EmployeeDeletedEvent) >> { args ->
-            assert args[0].employee == employee
+            assert args[0].aggregate.aggregateId != null
+            assert args[0].aggregate.id == employee.id
+            assert args[0].aggregate.name == employee.name
+            assert args[0].aggregate.photoURL == employee.photoURL
+            assert args[0].aggregate.hireDate == employee.hireDate
         }
     }
 

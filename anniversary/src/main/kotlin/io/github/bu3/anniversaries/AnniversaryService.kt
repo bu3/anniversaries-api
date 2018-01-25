@@ -30,18 +30,18 @@ class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository
 
     @EventListener
     override fun handleEmployeeCreatedEvent(employeeCreatedEvent: EmployeeCreatedEvent) {
-        val employee = employeeCreatedEvent.employee
-        val firstAnniversary = anniversaryParser.calculateAnniversaryDate(employee.hireDate)
+        val aggregate = employeeCreatedEvent.aggregate
+        val firstAnniversary = anniversaryParser.calculateAnniversaryDate(aggregate.hireDate)
         val anniversaries = arrayListOf<Anniversary>()
         (0..INITIAL_ANNIVERSARIES step 1).forEach { index ->
-            anniversaries.add(Anniversary(name = employee.name, employeeId = employee.id!!, hireDate = employee.hireDate, anniversaryDate = firstAnniversary.plusYears(index.toLong()), photoURL = employee.photoURL))
+            anniversaries.add(Anniversary(name = aggregate.name, employeeId = aggregate.id!!, hireDate = aggregate.hireDate, anniversaryDate = firstAnniversary.plusYears(index.toLong()), photoURL = aggregate.photoURL))
         }
         anniversaryRepository.save(anniversaries)
     }
 
     @EventListener
     override fun handleEmployeeDeletedEvent(employeeDeletedEvent: EmployeeDeletedEvent) {
-        anniversaryRepository.deleteByEmployeeId(employeeDeletedEvent.employee.id!!)
+        anniversaryRepository.deleteByEmployeeId(employeeDeletedEvent.aggregate.id!!)
     }
 
     @EventListener

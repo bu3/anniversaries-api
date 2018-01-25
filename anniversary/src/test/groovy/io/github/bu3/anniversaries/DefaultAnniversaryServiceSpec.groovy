@@ -1,7 +1,7 @@
 package io.github.bu3.anniversaries
 
+import io.github.bu3.employees.Aggregate
 import io.github.bu3.employees.AllEmployeeDeletedEvent
-import io.github.bu3.employees.Employee
 import io.github.bu3.employees.EmployeeCreatedEvent
 import io.github.bu3.employees.EmployeeDeletedEvent
 import spock.lang.Specification
@@ -47,7 +47,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
     def "Should manage an employee created event"() {
         given:
         def anniversaryDate = LocalDate.of(2018, 11, 1)
-        def employee = new Employee(1, 'Foo', 'photo url', LocalDate.of(2017, 11, 1))
+        def employee = new Aggregate(1, 'Foo', 'photo url', LocalDate.of(2017, 11, 1))
         def employeeCreatedEvent = new EmployeeCreatedEvent(employee)
 
         when:
@@ -70,7 +70,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
 
     def "Should delete anniversaries when an employee gets deleted"() {
         given:
-        def employee = new Employee(109, 'Foo', 'photo url', LocalDate.now())
+        def employee = new Aggregate(109, 'Foo', 'photo url', LocalDate.now())
         def employeeDeletedEvent = new EmployeeDeletedEvent(employee)
 
         when:

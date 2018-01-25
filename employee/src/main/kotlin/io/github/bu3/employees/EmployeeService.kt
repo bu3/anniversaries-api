@@ -14,7 +14,7 @@ interface EmployeeService {
 class DefaultEmployeeService(val employeeRepository: EmployeeRepository, val publisher: ApplicationEventPublisher) : EmployeeService {
     override fun store(employee: Employee): Employee {
         val save = employeeRepository.save(employee)
-        publisher.publishEvent(EmployeeCreatedEvent(save))
+        publisher.publishEvent(EmployeeCreatedEvent(Aggregate(save.id, save.name, save.photoURL, save.hireDate)))
         return save
     }
 
@@ -26,7 +26,7 @@ class DefaultEmployeeService(val employeeRepository: EmployeeRepository, val pub
         val employee = employeeRepository.findOne(employeeId)
         employeeRepository.delete(employeeId)
         if (employee != null) {
-            publisher.publishEvent(EmployeeDeletedEvent(employee))
+            publisher.publishEvent(EmployeeDeletedEvent(Aggregate(employee.id, employee.name, employee.photoURL, employee.hireDate)))
         }
     }
 

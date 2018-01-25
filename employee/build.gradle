@@ -9,9 +9,7 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 dependencies {
-    compile('org.liquibase:liquibase-core:3.5.3')
-
-    runtime('com.h2database:h2')
+    compile project(':shared')
 
     testCompile('org.codehaus.groovy:groovy-all:2.4.1')
     testCompile('org.springframework.boot:spring-boot-starter-test')
