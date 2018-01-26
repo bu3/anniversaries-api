@@ -12,9 +12,6 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter:${springBootVersion}")
 
-    compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
-    compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
-
     testCompile('org.codehaus.groovy:groovy-all:2.4.1')
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
     testCompile('org.spockframework:spock-core:1.1-groovy-2.4')
