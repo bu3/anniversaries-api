@@ -46,5 +46,4 @@ class EmployeeController(val employeeService: EmployeeService) {
     fun deleteAllEmployees() {
         employeeService.deleteAll()
     }
-
 }

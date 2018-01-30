@@ -6,6 +6,7 @@ dependencies {
 
     compile("org.springframework.boot:spring-boot-starter-validation:${springBootVersion}")
     compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+    compile ("org.springframework.cloud:spring-cloud-stream:${springCloudStreamVersion}")
 
     testCompile('org.codehaus.groovy:groovy-all:2.4.1')
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")

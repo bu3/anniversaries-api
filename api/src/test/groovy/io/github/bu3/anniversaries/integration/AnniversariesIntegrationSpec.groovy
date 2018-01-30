@@ -25,10 +25,12 @@ class AnniversariesIntegrationSpec extends Specification {
         def response = restTemplate.postForEntity('/employees', [name: 'Foo', hireDate: '2016-11-01', photoURL: 'http://cool.photo.jpg'], Map, [])
         assert response.statusCode == CREATED
         employee = response.body
+        Thread.sleep(2000)
     }
 
     void cleanup() {
         restTemplate.delete('/employees')
+        Thread.sleep(2000)
     }
 
     def "Should return all anniversaries"() {
@@ -85,6 +87,7 @@ class AnniversariesIntegrationSpec extends Specification {
         response.statusCode == NO_CONTENT
 
         when:
+        Thread.sleep(2000)
         response = restTemplate.getForEntity('/anniversaries?months={months}', List, ['months': '2'])
 
         then:

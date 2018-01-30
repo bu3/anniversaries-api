@@ -1,9 +1,7 @@
 package io.github.bu3.anniversaries
 
-import io.github.bu3.employees.AllEmployeeDeletedEvent
-import io.github.bu3.employees.EmployeeCreatedEvent
-import io.github.bu3.employees.EmployeeDeletedEvent
-import org.springframework.context.event.EventListener
+import io.github.bu3.employees.Aggregate
+import org.springframework.integration.annotation.ServiceActivator
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
@@ -12,9 +10,9 @@ val INITIAL_ANNIVERSARIES = 29
 interface AnniversaryService {
     fun loadAnniversaries(): List<Anniversary>
     fun loadAnniversariesWithinMonths(months: Int): List<Anniversary>
-    fun handleEmployeeCreatedEvent(employeeCreatedEvent: EmployeeCreatedEvent)
-    fun handleEmployeeDeletedEvent(employeeDeletedEvent: EmployeeDeletedEvent)
-    fun handleAllEmployeesDeletedEvent(allEmployeeDeletedEvent: AllEmployeeDeletedEvent)
+    fun handleEmployeeCreatedEvent(aggregate:Aggregate)
+    fun handleEmployeeDeletedEvent(aggregate:Aggregate)
+    fun handleAllEmployeesDeletedEvent()
 }
 
 @Service
@@ -28,9 +26,8 @@ class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository
         return anniversaryRepository.findByAnniversaryDateLessThanOrderByAnniversaryDateAsc(LocalDate.now().plusMonths(months.toLong()))
     }
 
-    @EventListener
-    override fun handleEmployeeCreatedEvent(employeeCreatedEvent: EmployeeCreatedEvent) {
-        val aggregate = employeeCreatedEvent.aggregate
+    @ServiceActivator(inputChannel = "createEmployeeInput")
+    override fun handleEmployeeCreatedEvent(aggregate:Aggregate) {
         val firstAnniversary = anniversaryParser.calculateAnniversaryDate(aggregate.hireDate)
         val anniversaries = arrayListOf<Anniversary>()
         (0..INITIAL_ANNIVERSARIES step 1).forEach { index ->
@@ -39,13 +36,13 @@ class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository
         anniversaryRepository.save(anniversaries)
     }
 
-    @EventListener
-    override fun handleEmployeeDeletedEvent(employeeDeletedEvent: EmployeeDeletedEvent) {
-        anniversaryRepository.deleteByEmployeeId(employeeDeletedEvent.aggregate.id!!)
+    @ServiceActivator(inputChannel = "deleteEmployeeInput")
+    override fun handleEmployeeDeletedEvent(aggregate:Aggregate) {
+        anniversaryRepository.deleteByEmployeeId(aggregate.id!!)
     }
 
-    @EventListener
-    override fun handleAllEmployeesDeletedEvent(allEmployeeDeletedEvent: AllEmployeeDeletedEvent) {
+    @ServiceActivator(inputChannel = "deleteAllEmployeesInput")
+    override fun handleAllEmployeesDeletedEvent() {
         anniversaryRepository.deleteAll()
     }
 }

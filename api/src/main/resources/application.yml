@@ -5,7 +5,25 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+  cloud:
+      stream:
+        bindings:
+          createEmployeeInput:
+            destination: createEmployee
+          createEmployeeOutput:
+            destination: createEmployee
+          deleteEmployeeInput:
+            destination: deleteEmployee
+          deleteEmployeeOutput:
+            destination: deleteEmployee
+          deleteAllEmployeesInput:
+            destination: deleteAllEmployees
+          deleteAllEmployeesOutput:
+            destination: deleteAllEmployees
 
 management:
   security:
     enabled: false
+
+
+

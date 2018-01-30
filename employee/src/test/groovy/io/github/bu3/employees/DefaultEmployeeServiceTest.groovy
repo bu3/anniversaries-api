@@ -1,6 +1,7 @@
 package io.github.bu3.employees
 
-import org.springframework.context.ApplicationEventPublisher
+import org.springframework.messaging.Message
+import org.springframework.messaging.MessageChannel
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -8,13 +9,18 @@ import java.time.LocalDate
 class DefaultEmployeeServiceTest extends Specification {
 
     EmployeeRepository employeeRepository
-    def publisher
+    def addEmployeeChannel
+    def deleteEmployeeChannel
+    def deleteAllEmployeesChannel
     def employeeService
 
     void setup() {
         employeeRepository = Mock(EmployeeRepository)
-        publisher = Mock(ApplicationEventPublisher)
-        employeeService = new DefaultEmployeeService(employeeRepository, publisher)
+        addEmployeeChannel = Mock(MessageChannel)
+        deleteEmployeeChannel = Mock(MessageChannel)
+        deleteAllEmployeesChannel = Mock(MessageChannel)
+        addEmployeeChannel = Mock(MessageChannel)
+        employeeService = new DefaultEmployeeService(employeeRepository, addEmployeeChannel, deleteEmployeeChannel, deleteAllEmployeesChannel)
     }
 
     def "Should save a new employee"() {
@@ -27,13 +33,18 @@ class DefaultEmployeeServiceTest extends Specification {
 
         then:
         1 * employeeRepository.save(employee) >> expectedEmployee
-        1 * publisher.publishEvent(_ as EmployeeCreatedEvent) >> { args ->
-            assert args[0].aggregate.aggregateId != null
-            assert args[0].aggregate.id != null
-            assert args[0].aggregate.name == employee.name
-            assert args[0].aggregate.photoURL == employee.photoURL
-            assert args[0].aggregate.hireDate == employee.hireDate
+        1 * addEmployeeChannel.send(_ as Message) >> { Message message ->
+            def payload = message.payload
+            assert payload.aggregateId != null
+            assert payload.id != null
+            assert payload.name == employee.name
+            assert payload.photoURL == employee.photoURL
+            assert payload.hireDate == employee.hireDate
+
+            true
         }
+        0 * deleteEmployeeChannel._
+        0 * deleteAllEmployeesChannel._
         result == expectedEmployee
     }
 
@@ -45,6 +56,8 @@ class DefaultEmployeeServiceTest extends Specification {
         def employees = employeeService.loadEmployees()
 
         then:
+        0 * deleteEmployeeChannel._
+        0 * deleteAllEmployeesChannel._
         1 * employeeRepository.findAll() >> [employee]
         employees[0].id == employee.id
         employees[0].name == employee.name
@@ -59,28 +72,32 @@ class DefaultEmployeeServiceTest extends Specification {
         employeeService.delete(1)
 
         then:
+        0 * addEmployeeChannel._
+        0 * deleteAllEmployeesChannel._
         1 * employeeRepository.findOne(1) >> employee
         1 * employeeRepository.delete(1)
-        1 * publisher.publishEvent(_ as EmployeeDeletedEvent) >> { args ->
-            assert args[0].aggregate.aggregateId != null
-            assert args[0].aggregate.id == employee.id
-            assert args[0].aggregate.name == employee.name
-            assert args[0].aggregate.photoURL == employee.photoURL
-            assert args[0].aggregate.hireDate == employee.hireDate
+        1 * deleteEmployeeChannel.send(_ as Message) >> { Message message ->
+            def payload = message.payload
+            assert payload.aggregateId != null
+            assert payload.id == employee.id
+            assert payload.name == employee.name
+            assert payload.photoURL == employee.photoURL
+            assert payload.hireDate == employee.hireDate
+
+            true
         }
     }
 
     def "Should not send an event if the employee does not exist when deleting"() {
-        given:
-        def employee = new Employee(1, 'Foo', "photo Url", LocalDate.MIN)
-
         when:
         employeeService.delete(1)
 
         then:
         1 * employeeRepository.findOne(1) >> null
         1 * employeeRepository.delete(1)
-        0 * publisher.publishEvent(_ as EmployeeDeletedEvent)
+        0 * addEmployeeChannel._
+        0 * deleteEmployeeChannel._
+        0 * deleteAllEmployeesChannel._
     }
 
     def "Should delete all"() {
@@ -88,7 +105,13 @@ class DefaultEmployeeServiceTest extends Specification {
         employeeService.deleteAll()
 
         then:
+        0 * addEmployeeChannel._
+        0 * deleteEmployeeChannel._
         1 * employeeRepository.deleteAll()
-        1 * publisher.publishEvent(_ as AllEmployeeDeletedEvent)
+        1 * deleteAllEmployeesChannel.send(_ as Message) >> { Message message ->
+            assert message.payload == 'Delete them all'
+
+            true
+        }
     }
 }
