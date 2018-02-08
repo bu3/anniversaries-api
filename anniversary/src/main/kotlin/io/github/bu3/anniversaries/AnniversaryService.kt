@@ -1,7 +1,7 @@
 package io.github.bu3.anniversaries
 
-import io.github.bu3.employees.Aggregate
-import org.springframework.integration.annotation.ServiceActivator
+import io.github.bu3.events.Aggregate
+import org.springframework.cloud.stream.annotation.StreamListener
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
@@ -10,8 +10,8 @@ val INITIAL_ANNIVERSARIES = 29
 interface AnniversaryService {
     fun loadAnniversaries(): List<Anniversary>
     fun loadAnniversariesWithinMonths(months: Int): List<Anniversary>
-    fun handleEmployeeCreatedEvent(aggregate:Aggregate)
-    fun handleEmployeeDeletedEvent(aggregate:Aggregate)
+    fun handleEmployeeCreatedEvent(aggregate: Aggregate)
+    fun handleEmployeeDeletedEvent(aggregate: Aggregate)
     fun handleAllEmployeesDeletedEvent()
 }
 
@@ -26,8 +26,8 @@ class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository
         return anniversaryRepository.findByAnniversaryDateLessThanOrderByAnniversaryDateAsc(LocalDate.now().plusMonths(months.toLong()))
     }
 
-    @ServiceActivator(inputChannel = "createEmployeeInput")
-    override fun handleEmployeeCreatedEvent(aggregate:Aggregate) {
+    @StreamListener("createEmployeeInput")
+    override fun handleEmployeeCreatedEvent(aggregate: Aggregate) {
         val firstAnniversary = anniversaryParser.calculateAnniversaryDate(aggregate.hireDate)
         val anniversaries = arrayListOf<Anniversary>()
         (0..INITIAL_ANNIVERSARIES step 1).forEach { index ->
@@ -36,12 +36,12 @@ class DefaultAnniversaryService(val anniversaryRepository: AnniversaryRepository
         anniversaryRepository.save(anniversaries)
     }
 
-    @ServiceActivator(inputChannel = "deleteEmployeeInput")
-    override fun handleEmployeeDeletedEvent(aggregate:Aggregate) {
+    @StreamListener("deleteEmployeeInput")
+    override fun handleEmployeeDeletedEvent(aggregate: Aggregate) {
         anniversaryRepository.deleteByEmployeeId(aggregate.id!!)
     }
 
-    @ServiceActivator(inputChannel = "deleteAllEmployeesInput")
+    @StreamListener("deleteAllEmployeesInput")
     override fun handleAllEmployeesDeletedEvent() {
         anniversaryRepository.deleteAll()
     }

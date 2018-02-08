@@ -21,16 +21,14 @@ class EmployeesIntegrationSpec extends Specification {
     }
 
     def "Should expose employee API"() {
-        def employee
-
         when:
         def response = restTemplate.postForEntity('/employees', [name: 'Foo', hireDate: '2016-11-01', photoURL: 'http://cool.photo.jpg'], Map, [])
 
         then:
         response.statusCode == HttpStatus.CREATED
+        Thread.sleep(2000)
 
         when:
-        employee = response.body
         response = restTemplate.getForEntity('/employees', List)
 
         then:
@@ -38,17 +36,18 @@ class EmployeesIntegrationSpec extends Specification {
         response.body.size() == 1
 
         with(response.body[0]) {
-            assert id == employee.id
-            assert name == employee.name
-            assert hireDate == employee.hireDate
-            assert photoURL == employee.photoURL
+            assert id != null
+            assert name == 'Foo'
+            assert hireDate == '2016-11-01'
+            assert photoURL == 'http://cool.photo.jpg'
         }
 
         when:
-        response = restTemplate.exchange("/employees/${employee.id}", DELETE, null, String)
+        response = restTemplate.exchange("/employees/${response.body[0].id}", DELETE, null, String)
 
         then:
         response.statusCode == HttpStatus.NO_CONTENT
+        Thread.sleep(2000)
 
         when:
         response = restTemplate.getForEntity('/employees', List)

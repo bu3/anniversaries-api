@@ -1,6 +1,6 @@
 package io.github.bu3.anniversaries
 
-import io.github.bu3.employees.Aggregate
+import io.github.bu3.events.Aggregate
 import spock.lang.Specification
 
 import java.time.LocalDate
@@ -19,7 +19,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
 
     def "Should load data from database"() {
         given:
-        def expectedAnniversaries = [new Anniversary(1, 1, 'foo', LocalDate.MIN, LocalDate.MAX, 'photo url')]
+        def expectedAnniversaries = [new Anniversary(1, "1", 'foo', LocalDate.MIN, LocalDate.MAX, 'photo url')]
 
         when:
         def anniversaries = anniversaryService.loadAnniversaries()
@@ -31,7 +31,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
 
     def "Should load data from database by time interval"() {
         given:
-        def expectedAnniversaries = [new Anniversary(1, 2, 'foo', LocalDate.MIN, LocalDate.MAX, 'photo url')]
+        def expectedAnniversaries = [new Anniversary(1, "2", 'foo', LocalDate.MIN, LocalDate.MAX, 'photo url')]
 
         when:
         def anniversaries = anniversaryService.loadAnniversariesWithinMonths(3)
@@ -44,7 +44,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
     def "Should manage an employee created event"() {
         given:
         def anniversaryDate = LocalDate.of(2018, 11, 1)
-        def aggregate = new Aggregate(1, 'Foo', 'photo url', LocalDate.of(2017, 11, 1))
+        def aggregate = new Aggregate("1", 'Foo', 'photo url', LocalDate.of(2017, 11, 1))
 
         when:
         anniversaryService.handleEmployeeCreatedEvent(aggregate)
@@ -56,7 +56,7 @@ class DefaultAnniversaryServiceSpec extends Specification {
             anniversaries.size() == 30
             anniversaries.eachWithIndex { anniversary, index ->
                 assert anniversary.name == aggregate.name
-                assert anniversary.employeeId == 1
+                assert anniversary.employeeId == "1"
                 assert anniversary.hireDate == aggregate.hireDate
                 assert anniversary.photoURL == aggregate.photoURL
                 assert anniversary.anniversaryDate == anniversaryDate.plusYears(index)
@@ -66,13 +66,13 @@ class DefaultAnniversaryServiceSpec extends Specification {
 
     def "Should delete anniversaries when an employee gets deleted"() {
         given:
-        def aggregate = new Aggregate(109, 'Foo', 'photo url', LocalDate.now())
+        def aggregate = new Aggregate("109", 'Foo', 'photo url', LocalDate.now())
 
         when:
         anniversaryService.handleEmployeeDeletedEvent(aggregate)
 
         then:
-        1 * anniversaryRepository.deleteByEmployeeId(109)
+        1 * anniversaryRepository.deleteByEmployeeId("109")
     }
 
     def "Should delete all anniversaries when all employees get deleted"() {

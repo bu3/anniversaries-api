@@ -15,7 +15,7 @@ data class Anniversary(
     var id: Long = 0,
 
     @NotNull
-    val employeeId: Long,
+    val employeeId: String,
 
     @NotNull
     val name: String,
@@ -29,7 +29,7 @@ data class Anniversary(
     @NotNull
     val photoURL: String?
 ) {
-    constructor() : this(name = "", employeeId = Long.MIN_VALUE, hireDate = LocalDate.MIN, anniversaryDate = LocalDate.MAX, photoURL = null)
+    constructor() : this(name = "", employeeId = "", hireDate = LocalDate.MIN, anniversaryDate = LocalDate.MAX, photoURL = null)
 }
 
 interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
@@ -38,5 +38,5 @@ interface AnniversaryRepository : JpaRepository<Anniversary, Long> {
     fun findByAnniversaryDateLessThanOrderByAnniversaryDateAsc(anniversaryDate: LocalDate): List<Anniversary>
 
     @Transactional
-    fun deleteByEmployeeId(employeeId: Long): Long
+    fun deleteByEmployeeId(aggregateId: String): Long
 }

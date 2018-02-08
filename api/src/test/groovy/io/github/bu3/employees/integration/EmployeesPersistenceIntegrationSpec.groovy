@@ -24,14 +24,14 @@ class EmployeesPersistenceIntegrationSpec extends Specification {
 
     def "Should save and load records"() {
         given:
-        def anniversary = new Employee(null, 'Foo', "http://url.com", LocalDate.now())
+        def employee = new Employee("random id", 'Foo', "http://url.com", LocalDate.now())
 
         when:
-        repository.save(anniversary)
+        repository.save(employee)
 
         then:
         def records = repository.findAll()
         records.size() == 1
-        records[0] == anniversary
+        records[0] == employee
     }
 }

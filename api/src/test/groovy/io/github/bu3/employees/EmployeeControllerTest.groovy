@@ -1,6 +1,7 @@
 package io.github.bu3.employees
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import io.github.bu3.events.EventService
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers
 import org.springframework.test.web.servlet.setup.MockMvcBuilders
 import spock.lang.Specification
@@ -15,30 +16,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class EmployeeControllerTest extends Specification {
 
-    def employeeService
-    def employeeController
+    EmployeeService employeeService
+    EventService eventService
+    EmployeeController employeeController
 
     void setup() {
         employeeService = Mock(EmployeeService)
-        employeeController = new EmployeeController(employeeService)
+        eventService = Mock(EventService)
+        employeeController = new EmployeeController(employeeService, eventService)
     }
 
     def "Should add a new employee"() {
         given:
         def employee = new Employee(null, 'Foo', "photo url", LocalDate.now())
-        def expectedEmployee = new Employee(1, 'Foo', "photo url", LocalDate.now())
 
         when:
-        def result = employeeController.addEmployee(employee)
+        employeeController.addEmployee(employee)
 
         then:
-        1 * employeeService.store(employee) >> expectedEmployee
-        result == expectedEmployee
+        0 * employeeService._
+        1 * eventService.createEmployee(employee)
     }
 
     def "Should return a list of employees"() {
         given:
-        def employees = [new Employee(1, 'Foo', "photo url", LocalDate.MIN)]
+        def employees = [new Employee("1", 'Foo', "photo url", LocalDate.MIN)]
 
         when:
         def response = employeeController.loadEmployees()
@@ -49,11 +51,15 @@ class EmployeeControllerTest extends Specification {
     }
 
     def "Should delete an employee"() {
+        given:
+        def employee = new Employee("1", 'foo', "photo Url", LocalDate.of(2016, 1, 1))
+
         when:
-        employeeController.deleteEmployee(1)
+        employeeController.deleteEmployee("1")
 
         then:
-        1 * employeeService.delete(1)
+        1 * employeeService.findById("1") >> employee
+        1 * eventService.deleteEmployee(employee)
     }
 
     def "Should delete all employees"() {
@@ -61,14 +67,13 @@ class EmployeeControllerTest extends Specification {
         employeeController.deleteAllEmployees()
 
         then:
-        1 * employeeService.deleteAll()
+        0 * employeeService._
+        1 * eventService.deleteAllEmployees()
     }
 
     @Unroll("#type")
     def "Should validate request"() {
         given:
-        def mockEmployeeService = Mock(EmployeeService)
-        def employeeController = new EmployeeController(mockEmployeeService)
         def mvc = MockMvcBuilders.standaloneSetup(employeeController).build()
 
         when:

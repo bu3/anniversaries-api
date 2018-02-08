@@ -4,16 +4,13 @@ import org.hibernate.validator.constraints.URL
 import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDate
 import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.validation.constraints.NotNull
 
 @Entity
 data class Employee(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Long? = null,
+    val id: String? = null,
 
     @field:NotNull
     val name: String,
@@ -25,7 +22,7 @@ data class Employee(
     val hireDate: LocalDate
 
 ) {
-    constructor() : this(name = "", hireDate = LocalDate.MIN, photoURL = null)
+    constructor() : this(id = "", name = "", hireDate = LocalDate.MIN, photoURL = null)
 }
 
-interface EmployeeRepository : JpaRepository<Employee, Long>
+interface EmployeeRepository : JpaRepository<Employee, String>

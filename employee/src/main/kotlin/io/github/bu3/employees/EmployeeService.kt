@@ -1,46 +1,41 @@
 package io.github.bu3.employees
 
-import org.springframework.beans.factory.annotation.Qualifier
-import org.springframework.cloud.stream.messaging.Source
-import org.springframework.integration.support.MessageBuilder
-import org.springframework.messaging.MessageChannel
+import io.github.bu3.events.Aggregate
+import org.springframework.cloud.stream.annotation.StreamListener
 import org.springframework.stereotype.Service
 
 interface EmployeeService {
-    fun store(employee: Employee): Employee
+    fun handleEmployeeCreatedEvent(aggregate: Aggregate)
+    fun handleEmployeeDeletedEvent(aggregate: Aggregate)
+    fun handleAllEmployeesDeletedEvent()
     fun loadEmployees(): List<Employee>
-    fun delete(employeeId: Long)
-    fun deleteAll()
+    fun findById(id:String): Employee
 }
 
 @Service
-class DefaultEmployeeService(
-    val employeeRepository: EmployeeRepository,
-    @Qualifier("createEmployeeOutput") val addEmployeeChannel: MessageChannel,
-    @Qualifier("deleteEmployeeOutput") val deleteEmployeeChannel: MessageChannel,
-    @Qualifier("deleteAllEmployeesOutput") val deleteAllEmployeeChannel: MessageChannel
-    ) : EmployeeService {
+class DefaultEmployeeService(val employeeRepository: EmployeeRepository) : EmployeeService {
 
-    override fun store(employee: Employee): Employee {
-        val save = employeeRepository.save(employee)
-        addEmployeeChannel.send(MessageBuilder.withPayload(Aggregate(save.id, save.name, save.photoURL, save.hireDate)).build())
-        return save
+    @StreamListener("createEmployeeInput")
+    override fun handleEmployeeCreatedEvent(aggregate: Aggregate) {
+        val employee = Employee(aggregate.id, aggregate.name, aggregate.photoURL, aggregate.hireDate)
+        employeeRepository.save(employee)
     }
 
     override fun loadEmployees(): List<Employee> {
         return employeeRepository.findAll()
     }
 
-    override fun delete(employeeId: Long) {
-        val employee = employeeRepository.findOne(employeeId)
-        employeeRepository.delete(employeeId)
-        if (employee != null) {
-            deleteEmployeeChannel.send(MessageBuilder.withPayload(Aggregate(employee.id, employee.name, employee.photoURL, employee.hireDate)).build())
-        }
+    @StreamListener("deleteEmployeeInput")
+    override fun handleEmployeeDeletedEvent(aggregate: Aggregate) {
+        employeeRepository.delete(aggregate.id)
     }
 
-    override fun deleteAll() {
+    @StreamListener("deleteAllEmployeesInput")
+    override fun handleAllEmployeesDeletedEvent() {
         employeeRepository.deleteAll()
-        deleteAllEmployeeChannel.send(MessageBuilder.withPayload("Delete them all").build())
+    }
+
+    override fun findById(id: String): Employee {
+        return employeeRepository.findOne(id)
     }
 }

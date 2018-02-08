@@ -69,3 +69,68 @@ databaseChangeLog:
                 - column:
                     name: photoUrl
                     type: varchar(255)
+  - changeSet:
+        id: 2
+        author: Bu3
+        changes:
+          - dropTable:
+              cascadeConstraints: true
+              tableName: anniversary
+          - dropTable:
+              cascadeConstraints: true
+              tableName: employee
+          - createTable:
+              tableName: employee
+              columns:
+                - column:
+                    name: id
+                    type: varchar(255)
+                    constraints:
+                      nullable: false
+                      primaryKey: true
+                - column:
+                    name: name
+                    type: varchar(100)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: photoUrl
+                    type: varchar(255)
+                - column:
+                    name: hire_date
+                    type: timestamp
+                    constraints:
+                      nullable: false
+          - createTable:
+              tableName: anniversary
+              columns:
+                - column:
+                    name: id
+                    autoIncrement: true
+                    type: bigint
+                    constraints:
+                      primaryKey: true
+                      nullable: false
+                - column:
+                    name: employee_id
+                    type: varchar(255)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: name
+                    type: varchar(100)
+                    constraints:
+                      nullable: false
+                - column:
+                    name: hire_date
+                    type: datetime
+                    constraints:
+                      nullable: false
+                - column:
+                    name: anniversary_date
+                    type: datetime
+                    constraints:
+                      nullable: false
+                - column:
+                    name: photoUrl
+                    type: varchar(255)

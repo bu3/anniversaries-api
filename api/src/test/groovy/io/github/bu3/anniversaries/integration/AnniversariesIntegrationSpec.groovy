@@ -19,12 +19,9 @@ class AnniversariesIntegrationSpec extends Specification {
     @Autowired
     TestRestTemplate restTemplate
 
-    def employee
-
     void setup() {
         def response = restTemplate.postForEntity('/employees', [name: 'Foo', hireDate: '2016-11-01', photoURL: 'http://cool.photo.jpg'], Map, [])
         assert response.statusCode == CREATED
-        employee = response.body
         Thread.sleep(2000)
     }
 
@@ -48,10 +45,10 @@ class AnniversariesIntegrationSpec extends Specification {
         response.body.size() == 30
         response.body.each { anniversary ->
             assert anniversary.id != null
-            assert anniversary.employeeId == employee.id
-            assert anniversary.name == employee.name
-            assert anniversary.hireDate == employee.hireDate
-            assert anniversary.photoURL == employee.photoURL
+            assert anniversary.employeeId != null
+            assert anniversary.name == 'Foo'
+            assert anniversary.hireDate == '2016-11-01'
+            assert anniversary.photoURL == 'http://cool.photo.jpg'
             expectedDates.contains(anniversary.anniversaryDate)
         }
     }
@@ -65,10 +62,10 @@ class AnniversariesIntegrationSpec extends Specification {
         response.body.size() == 1
         def anniversary = response.body[0]
         anniversary.id != null
-        anniversary.employeeId == employee.id
-        anniversary.name == employee.name
-        anniversary.hireDate == employee.hireDate
-        anniversary.photoURL == employee.photoURL
+        anniversary.employeeId != null
+        anniversary.name == 'Foo'
+        anniversary.hireDate == '2016-11-01'
+        anniversary.photoURL == 'http://cool.photo.jpg'
         anniversary.anniversaryDate == '2017-11-01'
     }
 
@@ -81,7 +78,7 @@ class AnniversariesIntegrationSpec extends Specification {
         response.body.size() == 1
 
         when:
-        response = restTemplate.exchange("/employees/${employee.id}", HttpMethod.DELETE, new HttpEntity<Object>(""), String)
+        response = restTemplate.exchange("/employees/${response.body[0].employeeId}", HttpMethod.DELETE, new HttpEntity<Object>(""), String)
 
         then:
         response.statusCode == NO_CONTENT

@@ -9,7 +9,7 @@ class AnniversaryControllerSpec extends Specification {
 
     def "Should load anniversaries"() {
         given:
-        def expectedAnniversaries = new Anniversary(1, 1, 'name', LocalDate.MIN, LocalDate.MAX, "photo url")
+        def expectedAnniversaries = new Anniversary(1, "employeeId", 'name', LocalDate.MIN, LocalDate.MAX, "photo url")
         AnniversaryService anniversaryService = Mock(AnniversaryService)
         AnniversaryController anniversaryController = new AnniversaryController(anniversaryService)
 
