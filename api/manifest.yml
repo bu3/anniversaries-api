@@ -6,3 +6,4 @@ applications:
   services:
     - anniversaries-db
     - anniversaries-amqp
+    - anniversaries-mongo
